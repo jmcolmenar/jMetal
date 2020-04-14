@@ -24,7 +24,7 @@ public class GenerationalGeneticAlgorithmTestIT {
 
   @Test
   public void shouldTheAlgorithmReturnTheCorrectSolutionWhenSolvingProblemOneMax() {
-    int NUMBER_OF_BITS = 512 ;
+    int NUMBER_OF_BITS = 64 ;
     Algorithm<BinarySolution> algorithm;
     BinaryProblem problem = new OneMax(NUMBER_OF_BITS) ;
 
@@ -33,14 +33,17 @@ public class GenerationalGeneticAlgorithmTestIT {
     SelectionOperator<List<BinarySolution>, BinarySolution> selectionOperator = new BinaryTournamentSelection<BinarySolution>();
 
     algorithm = new GeneticAlgorithmBuilder<BinarySolution>(problem, crossoverOperator, mutationOperator)
-            .setPopulationSize(50)
-            .setMaxEvaluations(50000)
+            .setPopulationSize(1000)
+            .setMaxEvaluations(25000)
             .setSelectionOperator(selectionOperator)
             .build() ;
 
     new AlgorithmRunner.Executor(algorithm).execute() ;
 
     BinarySolution solution = algorithm.getResult() ;
+   
+    System.out.println(solution.toString());
     assertEquals(NUMBER_OF_BITS, -1 * (int)solution.getObjective(0)) ;
+    
   }
 }

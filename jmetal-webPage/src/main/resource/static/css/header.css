@@ -1,0 +1,49 @@
+.navbar{
+	background-color: #333;
+	position: fixed !important;
+	top: 0;
+  	width: 100%;
+	
+}
+
+#title {
+    display: inline-block;
+    margin-right: 3rem;
+    font-size: 2.5rem;
+    line-height: inherit;
+    white-space: nowrap;
+    color: white;
+    list-style-type: none;
+}
+
+.navbar>.container, .navbar>.container-fluid {
+   	display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between !important;
+    
+}
+
+#bar-option{
+	list-style-type: none;
+  	margin: 0;
+  	padding: 0;
+  	overflow: hidden;
+}
+
+#bar-option li{
+	display: inline-block;	
+}
+
+#bar-option a:hover:not(.active) {
+  background-color: #111;
+}
+
+#bar-option a{
+	text-decoration: none;
+  	display: block;
+  	color:white !important;
+  	text-align: center;
+  	padding: 14px 16px;
+  	text-decoration: none;
+}

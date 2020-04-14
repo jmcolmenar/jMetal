@@ -147,3 +147,4 @@ coverage
 .Rhistory
 
 *.png
+/.recommenders/

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>JMetal</title>
+	<link rel="stylesheet" href="css/bootstrapCSS.css">
+	
+</head>
+<body id="">
+	
+	{{>header}}
+	
+	<ul class="list-group list-group-horizontal">
+	  <li class="list-group-item">Algorithm selected:	"{{selectedAlgorithm}}"</li>
+	  <li  class="list-group-item">Problem selected:	"{{selectedProblem}}"</li>
+	</ul>
+	<br>
+	<ul class="list-group list-group-horizontal">
+	  <li class="list-group-item">Selected crossover operator:	"{{selectedCrossover}}"</li>
+	  <li class="list-group-item">Selected mutation operator:		"{{selectedMutation}}"</li>
+	  <li class="list-group-item">Selected selection operator:	"{{selectedSelectionOperator}}"</li>
+	</ul>
+	<br>
+	<ul class="list-group list-group-horizontal">
+	  <li class="list-group-item">Selected max population:	"{{selectedMaxPopulation}}"</li>
+	  <li class="list-group-item">Selected max evaluations:		"{{selectedMaxEvaluations}}"</li>
+	  <li class="list-group-item">Selected number of bits:	"{{selectedNumberOfBits}}"</li>
+	</ul>
+	
+	
+	<p> The result is : {{result}}</p>
+	
+	
+</body>
+
+</html>
