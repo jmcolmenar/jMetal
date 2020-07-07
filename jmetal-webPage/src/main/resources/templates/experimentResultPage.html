@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>JMetal</title>
+	<link rel="stylesheet" href="css/bootstrapCSS.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  	<script src="js/highcharts.js"></script>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/charts.js"></script>
+	
+</head>
+<body id="">
+	
+	{{>header}}
+	<ul class="list-group list-group-horizontal">
+	  <li class="list-group-item">Algorithm selected:	"{{selectedAlgorithm}}"</li>
+	  <li  class="list-group-item">Problem selected:	"{{selectedProblem}}"</li>
+	</ul>
+	<br>
+	<ul class="list-group list-group-horizontal">
+	  <li class="list-group-item">Selected crossover operator:	"{{selectedCrossover}}"</li>
+	  <li class="list-group-item">Selected mutation operator:		"{{selectedMutation}}"</li>
+	  <li class="list-group-item">Selected selection operator:	"{{selectedSelectionOperator}}"</li>
+	</ul>
+	<br>
+	<ul class="list-group list-group-horizontal">
+		<li class="list-group-item">Selected max population:	"{{selectedMaxPopulation}}"</li>
+		<li class="list-group-item">Selected max evaluations:		"{{selectedMaxEvaluations}}"</li>
+		<li class="list-group-item">Selected number of bits:	"{{selectedNumberOfBits}}"</li>
+	</ul>
+	<div class="col text-center">
+		<button style="margin-top: 2px; margin-right: auto; margin-left: auto;" id="showAllResult" class="btn btn-outline-secondary" onclick="drawFullChart();">Show All Results</button>
+	</div>
+	
+	<div class="col-md-12 wow fadeInUp">
+		<div class="interactions-col">
+			<div style="padding-top: 5px; padding-bottom: 10px;padding-right:20px; position: relative; width: 100%;" id="allResultsGrafics"></div>
+			<div style="padding-top: 5px; padding-bottom: 10px;padding-right:20px; position: relative; width: 100%;" id="resultsGrafics"></div>
+			
+		</div>
+	</div>
+	
+	
+</body>
+
+</html>

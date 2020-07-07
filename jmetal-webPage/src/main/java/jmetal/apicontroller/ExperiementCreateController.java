@@ -1,13 +1,9 @@
-package controllers;
-
-import static org.junit.Assert.assertEquals;
+package jmetal.apicontroller;
 
 import java.util.List;
 
-import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GenerationalGeneticAlgorithm;
-import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.SteadyStateGeneticAlgorithm;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
@@ -19,6 +15,15 @@ import org.uma.jmetal.problem.singleobjective.OneMax;
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
+
+import jmetal.algorithms.GenerationalGeneticAlgorithm;
+import jmetal.algorithms.SteadyStateGeneticAlgorithm;
+import jmetal.javaclass.Experiment;
+import jmetal.javaclass.Result;
+import jmetal.javaropository.ExperimentRepository;
+import jmetal.javaropository.ResultRepository;
+
+
 
 public class ExperiementCreateController  {
 	
@@ -32,11 +37,23 @@ public class ExperiementCreateController  {
 	private String mutationOperator;
 	private String selectionOperator;
 	
-	public ExperiementCreateController(String algorithm, String problem, String crossoverOperator, 
+	private Experiment experiment; 
+	@Autowired
+	private ExperimentRepository experimentRepository; 
+	@Autowired
+	private ResultRepository resultRepository; 
+	
+	public ExperiementCreateController() {
+		
+	}
+	
+	public ExperiementCreateController(Experiment experiment,ExperimentRepository experimentRepository, ResultRepository resultRepository,String algorithm, String problem, String crossoverOperator, 
 			String mutationOperator, String selectionOperator, 
 			int maxEvaluations, int populationSize, int specificProblemValue) {
 		super();		
-		
+		this.experiment = experiment;
+		this.experimentRepository = experimentRepository;
+		this.resultRepository = resultRepository;
 		this.problem = problem;
 		this.algorithm = algorithm;
 		this.maxEvaluations = maxEvaluations;
@@ -45,7 +62,6 @@ public class ExperiementCreateController  {
 		this.crossoverOperator = crossoverOperator;
 		this.mutationOperator = mutationOperator;
 		this.selectionOperator = selectionOperator;
-		
 	}
 	
 	public String createExperimentAndRun() {
@@ -87,28 +103,22 @@ public class ExperiementCreateController  {
 			
 			switch (this.algorithm) {
 			case "STEADY_STATE":
-				algorithm = new SteadyStateGeneticAlgorithm<BinarySolution>(problem, maxEvaluations, populationSize,
+				algorithm = new SteadyStateGeneticAlgorithm<BinarySolution>(resultRepository,experiment,problem, maxEvaluations, populationSize,
 				          crossoverOperator, mutationOperator, selectionOperator);
 				
 				new AlgorithmRunner.Executor(algorithm).execute() ;
 
-			    BinarySolution solutionS = algorithm.getResult() ;
-			   
-//			    assertEquals(specificProblemValue, -1 * (int)solutionS.getObjective(0)) ;
-			    result = solutionS.toString();
+				result = algorithm.getResult().toString() ;
 			    
 				break;
 				
-			case "GENERATIONAL":
-				algorithm = new GenerationalGeneticAlgorithm<BinarySolution>(problem, maxEvaluations, populationSize,
+			case "GENERATIONAL":				
+				algorithm = new GenerationalGeneticAlgorithm<BinarySolution>(resultRepository,experiment,problem, maxEvaluations, populationSize,
 				          crossoverOperator, mutationOperator, selectionOperator, new SequentialSolutionListEvaluator<BinarySolution>());
-				
+								
 				new AlgorithmRunner.Executor(algorithm).execute() ;
 
-			    BinarySolution solutionG = algorithm.getResult() ;
-			   
-//			    assertEquals(specificProblemValue, -1 * (int)solutionG.getObjective(0)) ;
-			    result = solutionG.toString();
+			    result = algorithm.getResult().toString() ;
 			    
 				break;
 			default:
@@ -119,6 +129,16 @@ public class ExperiementCreateController  {
 		default:
 			break;
 		}
+		
+		String[] arrayResult = result.split(" ");
+		int iterator = arrayResult.length - 1;
+
+		while (!arrayResult[iterator].startsWith("-")) {
+			iterator--;
+		}
+		Double resultValue = Double.parseDouble(arrayResult[iterator]);
+		Result resultSave = new Result((resultValue*-1), experiment);
+		resultRepository.save(resultSave);
 		return result;
 	}
 

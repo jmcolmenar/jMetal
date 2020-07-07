@@ -3,7 +3,7 @@
 <head>
 <title>JMetal</title>
 	<link rel="stylesheet" href="css/bootstrapCSS.css">
-	<link rel="stylesheet" href="css/experiment.css">
+	<link rel="stylesheet" href="css/experimentPage.css">
 	<script type="text/javascript" src="js/experiment.js"></script>
 </head>
 <body id="selectExperimentPage">
@@ -46,21 +46,25 @@
 				</select>
 			</div>
 			<div class="row">
-				<div class="col-md-2"></div>
-					<div class="col-md-8">
+				<div class="col-md-12"></div>
+				<div class="col-md-4">
 					<div class="form-group">
 		            	<label for="maxPopulation">Max population:</label>
-		                <input class="form-control" id="selectMaxPopulation" name="maxPopulation" placeholder="Number of max population" type="number" value="100" required="required">
+		                <input class="form-control" id="selectMaxPopulation" name="maxPopulation" placeholder="Number of max population" type="number" value="250" required="required">
 		             </div>
-		             <div class="form-group">
+            	</div>
+            	<div class="col-md-4">
+					<div class="form-group">
 		             	<label for="maxEvaluations">Max evaluations:</label>
-		                <input class="form-control" id="selectMaxEvaluations" name="maxEvaluations" placeholder="Number of max evaluations" type="number" value="250" required="required">
+		                <input class="form-control" id="selectMaxEvaluations" name="maxEvaluations" placeholder="Number of max evaluations" type="number" value="1000" required="required">
 		             </div>
+            	</div>
+            	<div class="col-md-4">
 		             <div class="form-group">
 		             	<label for="numberOfBits">Number of bits:</label>
 		                <input class="form-control" id="selectSpecificProblemValue" name="specificProblemValue" placeholder="Specific problem value" type="number" value="64" required="required">
 		             </div>
-	            </div>
+            	</div>
 		            
 	            <div class="col-md-12 form-group text-center">
 	            	<label for="submit"></label>

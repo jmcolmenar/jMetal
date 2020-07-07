@@ -1,0 +1,1 @@
+docker run --rm --name jMetal-db -p 3306:3306 -e MYSQL_USER=root -e MYSQL_ROOT_PASSWORD=jMetalroot -e MYSQL_DATABASE=jMetal_database mysql:8.0.20
