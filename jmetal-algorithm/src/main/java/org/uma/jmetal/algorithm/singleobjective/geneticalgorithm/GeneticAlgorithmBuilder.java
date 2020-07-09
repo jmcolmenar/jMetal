@@ -47,7 +47,7 @@ public class GeneticAlgorithmBuilder<S extends Solution<?>> {
 
     evaluator = new SequentialSolutionListEvaluator<S>();
 
-    this.variant = GeneticAlgorithmVariant.STEADY_STATE ;
+    this.variant = GeneticAlgorithmVariant.GENERATIONAL ;
   }
 
   public GeneticAlgorithmBuilder<S> setMaxEvaluations(int maxEvaluations) {

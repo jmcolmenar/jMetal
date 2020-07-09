@@ -54,12 +54,13 @@ public class MainPageController {
 	
 	@RequestMapping("/experimentResultPage")
 	public void experimentResultPage(Model model, @RequestParam String algorithm, @RequestParam String problem, 
-			@RequestParam String crossover, @RequestParam String mutation,  @RequestParam String selectionOperator,
+			@RequestParam String crossover, @RequestParam double crossoverValue, @RequestParam String mutation,  @RequestParam String selectionOperator,
 			@RequestParam int maxPopulation, @RequestParam int maxEvaluations, @RequestParam int specificProblemValue) throws InterruptedException {
 		
 		model.addAttribute("selectedAlgorithm", algorithm);
 		model.addAttribute("selectedProblem", problem);
 		model.addAttribute("selectedCrossover", crossover);
+		model.addAttribute("selectedCrossoverValue", crossoverValue);
 		model.addAttribute("selectedMutation", mutation);
 		model.addAttribute("selectedSelectionOperator", selectionOperator);
 		model.addAttribute("selectedMaxPopulation", maxPopulation);
@@ -74,7 +75,7 @@ public class MainPageController {
 		setExpeeriment(exp);
 		
 		ExperiementCreateController experiementCreateController = 
-				new ExperiementCreateController(exp,experimentRepository,resultRepository,algorithm, problem, crossover, mutation, selectionOperator,
+				new ExperiementCreateController(exp,experimentRepository,resultRepository,algorithm, problem, crossover,crossoverValue, mutation, selectionOperator,
 						maxEvaluations, maxPopulation, specificProblemValue);
 		finished = false;
 		pushed = true;

@@ -89,6 +89,7 @@ function updateChart(count) {
 		if (se.find(checkToSave)) {
 			category = newCat;
 			serie = newSe;
+			saveCheck = se.find(checkToSave);
 		} 
 		drawLiveLineChart(newCat, newSe);
 		

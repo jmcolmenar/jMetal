@@ -30,6 +30,7 @@ public class ExperiementCreateController  {
 	
 	private String algorithm;
 	private String problem;
+	private double crossoverValue;
 	private int maxEvaluations;
 	private int populationSize;
 	private int specificProblemValue;
@@ -47,9 +48,9 @@ public class ExperiementCreateController  {
 		
 	}
 	
-	public ExperiementCreateController(Experiment experiment,ExperimentRepository experimentRepository, ResultRepository resultRepository,String algorithm, String problem, String crossoverOperator, 
-			String mutationOperator, String selectionOperator, 
-			int maxEvaluations, int populationSize, int specificProblemValue) {
+	public ExperiementCreateController(Experiment experiment,ExperimentRepository experimentRepository, ResultRepository resultRepository,
+			String algorithm, String problem, String crossoverOperator, double crossoverValue, String mutationOperator, 
+			String selectionOperator, int maxEvaluations, int populationSize, int specificProblemValue) {
 		super();		
 		this.experiment = experiment;
 		this.experimentRepository = experimentRepository;
@@ -60,6 +61,7 @@ public class ExperiementCreateController  {
 		this.populationSize = populationSize;
 		this.specificProblemValue = specificProblemValue;
 		this.crossoverOperator = crossoverOperator;
+		this.crossoverValue = crossoverValue;
 		this.mutationOperator = mutationOperator;
 		this.selectionOperator = selectionOperator;
 	}
@@ -76,7 +78,7 @@ public class ExperiementCreateController  {
 			
 			switch (this.crossoverOperator) {
 			case "SinglePointCrossover":
-				crossoverOperator = new SinglePointCrossover(0.9) ;	
+				crossoverOperator = new SinglePointCrossover(this.crossoverValue) ;	
 				break;
 			default:
 				break;
@@ -180,6 +182,14 @@ public class ExperiementCreateController  {
 
 	public void setCrossoverOperator(String crossoverOperator) {
 		this.crossoverOperator = crossoverOperator;
+	}
+
+	public double getCrossoverValue() {
+		return crossoverValue;
+	}
+
+	public void setCrossoverValue(double crossoverValue) {
+		this.crossoverValue = crossoverValue;
 	}
 
 	public String getMutationOperator() {
