@@ -1,7 +1,6 @@
 package jmetal;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -18,7 +17,6 @@ import jmetal.javaclass.Experiment;
 import jmetal.javaclass.Result;
 import jmetal.javaropository.ExperimentRepository;
 import jmetal.javaropository.ResultRepository;
-import weka.core.converters.JSONSaver;
 
 @Controller
 public class MainPageController {

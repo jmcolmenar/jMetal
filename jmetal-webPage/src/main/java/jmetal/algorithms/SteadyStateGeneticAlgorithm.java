@@ -1,5 +1,10 @@
 package jmetal.algorithms;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.uma.jmetal.algorithm.impl.AbstractGeneticAlgorithm;
 import org.uma.jmetal.operator.CrossoverOperator;
@@ -11,13 +16,7 @@ import org.uma.jmetal.util.comparator.ObjectiveComparator;
 
 import jmetal.javaclass.Experiment;
 import jmetal.javaclass.Result;
-import jmetal.javaropository.ExperimentRepository;
 import jmetal.javaropository.ResultRepository;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 /**
  * @author Antonio J. Nebro <antonio@lcc.uma.es>

@@ -12,7 +12,6 @@ import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 
 import jmetal.javaclass.Experiment;
 import jmetal.javaclass.Result;
-import jmetal.javaropository.ExperimentRepository;
 import jmetal.javaropository.ResultRepository;
 
 import java.util.Collections;
