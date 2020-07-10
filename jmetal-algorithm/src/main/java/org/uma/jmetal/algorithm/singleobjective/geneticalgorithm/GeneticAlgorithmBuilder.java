@@ -39,8 +39,8 @@ public class GeneticAlgorithmBuilder<S extends Solution<?>> {
       CrossoverOperator<S> crossoverOperator,
       MutationOperator<S> mutationOperator) {
     this.problem = problem;
-    maxEvaluations = 25000;
-    populationSize = 100;
+    maxEvaluations = 250;
+    populationSize = 10;
     this.mutationOperator = mutationOperator ;
     this.crossoverOperator = crossoverOperator ;
     this.selectionOperator = defaultSelectionOperator ;

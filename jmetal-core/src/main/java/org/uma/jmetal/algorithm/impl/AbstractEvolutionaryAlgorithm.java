@@ -61,6 +61,9 @@ public abstract class AbstractEvolutionaryAlgorithm<S, R>  implements Algorithm<
       offspringPopulation = reproduction(matingPopulation);
       offspringPopulation = evaluatePopulation(offspringPopulation);
       population = replacement(population, offspringPopulation);
+      
+//      System.out.println(getResult().getClass().getFields().);
+      
       updateProgress();
     }
   }

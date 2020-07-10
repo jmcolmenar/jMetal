@@ -51,7 +51,8 @@
         <module>jmetal-algorithm</module>
         <module>jmetal-problem</module>
         <module>jmetal-exec</module>
-    </modules>
+    <module>jmetal-webPage</module>
+  </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

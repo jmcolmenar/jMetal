@@ -50,7 +50,6 @@ public class SteadyStateGeneticAlgorithm<S extends Solution<?>> extends Abstract
       population.remove(worstSolutionIndex);
       population.add(offspringPopulation.get(0));
     }
-
     return population;
   }
 
@@ -65,6 +64,7 @@ public class SteadyStateGeneticAlgorithm<S extends Solution<?>> extends Abstract
     mutationOperator.execute(offspring.get(0));
 
     offspringPopulation.add(offspring.get(0));
+    
     return offspringPopulation;
   }
 
@@ -96,7 +96,9 @@ public class SteadyStateGeneticAlgorithm<S extends Solution<?>> extends Abstract
   }
 
   @Override public void updateProgress() {
-    evaluations++;
+	 // rightResult();
+	  evaluations++;
+    
   }
 
   @Override public String getName() {
@@ -106,4 +108,15 @@ public class SteadyStateGeneticAlgorithm<S extends Solution<?>> extends Abstract
   @Override public String getDescription() {
     return "Steady-State Genetic Algorithm" ;
   }
+  /*
+  public void rightResult() {
+	String result = getResult().toString();
+	String[] arrayResult = result.split(" ");
+	int iterator = arrayResult.length-1;
+	
+	while (!arrayResult[iterator].startsWith("-")) {
+		iterator--;
+	}
+	System.out.println(evaluations + " -> " + arrayResult[iterator]);
+	}*/
 }

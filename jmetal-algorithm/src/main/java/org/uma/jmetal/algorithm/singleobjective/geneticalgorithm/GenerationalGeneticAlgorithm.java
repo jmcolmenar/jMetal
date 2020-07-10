@@ -74,6 +74,7 @@ public class GenerationalGeneticAlgorithm<S extends Solution<?>> extends Abstrac
   }
 
   @Override public void updateProgress() {
+//	 rightResult();
     evaluations += getMaxPopulationSize();
   }
 
@@ -84,4 +85,16 @@ public class GenerationalGeneticAlgorithm<S extends Solution<?>> extends Abstrac
   @Override public String getDescription() {
     return "Generational Genetic Algorithm" ;
   }
+  
+  /*
+  public void rightResult() {
+	String result = getResult().toString();
+	String[] arrayResult = result.split(" ");
+	int iterator = arrayResult.length-1;
+	
+	while (!arrayResult[iterator].startsWith("-")) {
+		iterator--;
+	}
+	System.out.println(evaluations + " -> " + arrayResult[iterator]);
+	}*/
 }
