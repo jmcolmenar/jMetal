@@ -45,6 +45,9 @@ public class Experiment{
 	
 	@OneToOne
 	private User user;
+	
+	@OneToOne
+	private FinalResults finalResult;
 
 	public Experiment() {
 	}
@@ -141,6 +144,14 @@ public class Experiment{
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public FinalResults getFinalResult() {
+		return finalResult;
+	}
+
+	public void setFinalResult(FinalResults finalResult) {
+		this.finalResult = finalResult;
 	}
 	
 	

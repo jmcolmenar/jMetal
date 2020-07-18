@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import jmetal.apicontroller.ExperiementCreateController;
 import jmetal.javaclass.Experiment;
+import jmetal.javaclass.FinalResults;
 import jmetal.javaclass.Result;
 import jmetal.javaropository.ExperimentRepository;
+import jmetal.javaropository.FinalResultsRepository;
 import jmetal.javaropository.ResultRepository;
 
 @Controller
@@ -25,6 +27,9 @@ public class MainPageController {
 	private ExperimentRepository experimentRepository; 
 	@Autowired
 	private ResultRepository resultRepository; 
+	@Autowired
+	private FinalResultsRepository finalresultsRepository; 
+	
 	private Experiment experiment;
 	private static volatile String result;
 	private static volatile boolean finished, pushed;
@@ -73,8 +78,8 @@ public class MainPageController {
 		setExpeeriment(exp);
 		
 		ExperiementCreateController experiementCreateController = 
-				new ExperiementCreateController(exp,experimentRepository,resultRepository,algorithm, problem, crossover,crossoverValue, mutation, selectionOperator,
-						maxEvaluations, maxPopulation, specificProblemValue);
+				new ExperiementCreateController(exp,experimentRepository,resultRepository,finalresultsRepository,algorithm,
+						problem, crossover,crossoverValue, mutation, selectionOperator,	maxEvaluations, maxPopulation, specificProblemValue);
 		finished = false;
 		pushed = true;
 //		result = experiementCreateController.createExperimentAndRun();
@@ -91,7 +96,7 @@ public class MainPageController {
 	
 	public static void processRunExperiment(ExperiementCreateController experiementCreateController) throws InterruptedException {
 		new Thread(() -> {
-			result = experiementCreateController.createExperimentAndRun();
+			experiementCreateController.createExperimentAndRun();
 			finished = true;
 		}).start();
 	}
@@ -137,6 +142,23 @@ public class MainPageController {
 		
 		jsonObject.putOpt("categories", jsonArrayId);
 		jsonObject.putOpt("series", jsonArrayValue);
+		return jsonObject.toString();
+	}
+	
+	@RequestMapping("/getFinalResult")
+	@ResponseBody
+	public String getFinalResult(){
+		FinalResults finalResultData = finalresultsRepository.findResultsByExperimentId(experiment.getId());
+		
+		JSONArray jsonArrayResult = new JSONArray();
+		JSONArray jsonArraypopulation = new JSONArray();
+		JSONObject jsonObject = new JSONObject();
+		
+		jsonArrayResult.put(finalResultData.getResultValue());
+		jsonArraypopulation.put(finalResultData.getLastPopulation());
+		
+		jsonObject.putOpt("finalResult", jsonArrayResult);
+		jsonObject.putOpt("finalPopulation", jsonArraypopulation);
 		return jsonObject.toString();
 	}
 	

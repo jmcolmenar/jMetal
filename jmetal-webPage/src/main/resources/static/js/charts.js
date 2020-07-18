@@ -1,6 +1,7 @@
 $.ajax({
 	url : 'chartdata',
 	success : function(result) {
+		$("#showResult").hide();
 		category = JSON.parse(result).categories;
 		serie = JSON.parse(result).series;
 		saveCheck = serie[0];
@@ -79,9 +80,7 @@ var update = setInterval(function() {
 function updateChart(count) {
 	$.get("/chartdata", function(result) {
 		var end = (JSON.parse(result).finish);
-		if (end == true) {
-			clearInterval(update);
-		}
+		
 		var cat = (JSON.parse(result).categories);
 		var se = (JSON.parse(result).series);
 		var newCat = category.concat(cat);
@@ -91,6 +90,10 @@ function updateChart(count) {
 			serie = newSe;
 			saveCheck = se.find(checkToSave);
 		} 
+		if (end == true) {
+			clearInterval(update);
+			showFinalResult();
+		}
 		drawLiveLineChart(newCat, newSe);
 		
 	});
@@ -99,6 +102,18 @@ function updateChart(count) {
 function checkToSave(num) {
 	  return num != saveCheck;
 	}
+
+function showFinalResult() {
+	$.get("/getFinalResult", function(result) {
+		var finalResult = (JSON.parse(result).finalResult);
+		var finalPopulation = (JSON.parse(result).finalPopulation);
+		$("#finalResult").text("The final result is:	"+finalResult);
+		$("#finalPopulation").text(finalPopulation);
+		$("#showResult").show();
+	});
+	
+	
+}
 
 function drawFullChart() {
 	$.get("/showAllResultChart", function(result) {

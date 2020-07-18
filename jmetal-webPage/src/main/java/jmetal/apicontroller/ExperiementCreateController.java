@@ -1,5 +1,6 @@
 package jmetal.apicontroller;
 
+import java.text.StringCharacterIterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,15 @@ import org.uma.jmetal.problem.singleobjective.OneMax;
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
+import org.w3c.dom.Text;
 
-import jmetal.algorithms.GenerationalGeneticAlgorithm;
-import jmetal.algorithms.SteadyStateGeneticAlgorithm;
+import jmetal.algorithms.GenerationalGeneticAlgorithmWebFormet;
+import jmetal.algorithms.SteadyStateGeneticAlgorithmWebFormat;
 import jmetal.javaclass.Experiment;
-import jmetal.javaclass.Result;
+import jmetal.javaclass.FinalResults;
 import jmetal.javaropository.ExperimentRepository;
+import jmetal.javaropository.FinalResultsRepository;
 import jmetal.javaropository.ResultRepository;
-
 
 
 public class ExperiementCreateController  {
@@ -43,18 +45,22 @@ public class ExperiementCreateController  {
 	private ExperimentRepository experimentRepository; 
 	@Autowired
 	private ResultRepository resultRepository; 
+	@Autowired
+	private FinalResultsRepository finalResultsRepository; 
 	
 	public ExperiementCreateController() {
 		
 	}
 	
 	public ExperiementCreateController(Experiment experiment,ExperimentRepository experimentRepository, ResultRepository resultRepository,
-			String algorithm, String problem, String crossoverOperator, double crossoverValue, String mutationOperator, 
-			String selectionOperator, int maxEvaluations, int populationSize, int specificProblemValue) {
+			FinalResultsRepository finalResultsRepository,String algorithm, String problem, String crossoverOperator, 
+			double crossoverValue, String mutationOperator, String selectionOperator,
+			int maxEvaluations, int populationSize, int specificProblemValue) {
 		super();		
 		this.experiment = experiment;
 		this.experimentRepository = experimentRepository;
 		this.resultRepository = resultRepository;
+		this.finalResultsRepository = finalResultsRepository;
 		this.problem = problem;
 		this.algorithm = algorithm;
 		this.maxEvaluations = maxEvaluations;
@@ -66,8 +72,9 @@ public class ExperiementCreateController  {
 		this.selectionOperator = selectionOperator;
 	}
 	
-	public String createExperimentAndRun() {
-		String result = "0";
+	public void createExperimentAndRun() {
+		double result = 0;
+		String population = null;
 		switch (this.problem) {
 		case "OneMax":
 			BinaryProblem problem = new OneMax(this.specificProblemValue);
@@ -105,22 +112,24 @@ public class ExperiementCreateController  {
 			
 			switch (this.algorithm) {
 			case "STEADY_STATE":
-				algorithm = new SteadyStateGeneticAlgorithm<BinarySolution>(resultRepository,experiment,problem, maxEvaluations, populationSize,
+				algorithm = new SteadyStateGeneticAlgorithmWebFormat<BinarySolution>(resultRepository,experiment,problem, maxEvaluations, populationSize,
 				          crossoverOperator, mutationOperator, selectionOperator);
 				
 				new AlgorithmRunner.Executor(algorithm).execute() ;
 
-				result = algorithm.getResult().toString() ;
+				result = algorithm.getResult().getObjective(0);
+				population = algorithm.getResult().getVariableValueString(0);
 			    
 				break;
 				
 			case "GENERATIONAL":				
-				algorithm = new GenerationalGeneticAlgorithm<BinarySolution>(resultRepository,experiment,problem, maxEvaluations, populationSize,
+				algorithm = new GenerationalGeneticAlgorithmWebFormet<BinarySolution>(resultRepository,experiment,problem, maxEvaluations, populationSize,
 				          crossoverOperator, mutationOperator, selectionOperator, new SequentialSolutionListEvaluator<BinarySolution>());
 								
 				new AlgorithmRunner.Executor(algorithm).execute() ;
 
-			    result = algorithm.getResult().toString() ;
+			    result = algorithm.getResult().getObjective(0);
+			    population = algorithm.getResult().getVariableValueString(0);
 			    
 				break;
 			default:
@@ -132,16 +141,30 @@ public class ExperiementCreateController  {
 			break;
 		}
 		
-		String[] arrayResult = result.split(" ");
-		int iterator = arrayResult.length - 1;
-
-		while (!arrayResult[iterator].startsWith("-")) {
-			iterator--;
+		
+		String finalPopulation="";
+	    for (int i = 0; i < population.length()-1; i++) {
+			finalPopulation +=(population.charAt(i)/*+","*/);
 		}
-		Double resultValue = Double.parseDouble(arrayResult[iterator]);
-		Result resultSave = new Result((resultValue*-1), experiment);
-		resultRepository.save(resultSave);
-		return result;
+	    finalPopulation += population.charAt(population.length()-1);
+	    
+//	    Text textPopulation = null;
+//	    textPopulation.setData(finalPopulation);
+	    FinalResults finalResult = new FinalResults(experiment, result*-1, finalPopulation);
+	    finalResultsRepository.save(finalResult);
+	    
+	    experiment.setFinalResult(finalResult);
+	    experimentRepository.save(experiment);
+//		String[] arrayResult = result.split(" ");
+//		int iterator = arrayResult.length - 1;
+//
+//		while (!arrayResult[iterator].startsWith("-")) {
+//			iterator--;
+//		}
+//		Double resultValue = Double.parseDouble(arrayResult[iterator]);
+//		Result resultSave = new Result((resultValue*-1), experiment);
+//		resultRepository.save(resultSave);
+		
 	}
 
 	public String getAlgorithm() {
