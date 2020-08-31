@@ -1,5 +1,6 @@
 package jmetal.javaclass;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,6 +9,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonView;
+
+/**
+ * 
+ * @author Harender
+ *
+ */
 
 @Entity
 @Table(name="Results")
@@ -20,8 +27,8 @@ public class Result {
 	private Long id;
 	
 	@JsonView(BasicInformation.class)
-	@ManyToOne
-	private Experiment experiment;
+	@ManyToOne(cascade = CascadeType.REMOVE)
+	private WebPageExperiment experiment;
 	
 	@JsonView(BasicInformation.class)
 	private double value;
@@ -29,7 +36,7 @@ public class Result {
 	public Result() {
 	}
 	
-	public Result(double value, Experiment experiment) {
+	public Result(double value, WebPageExperiment experiment) {
 		super();
 		this.experiment = experiment;
 		this.value = value;
@@ -39,19 +46,11 @@ public class Result {
 		this.value = value;
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Experiment getExperiment() {
+	public WebPageExperiment getExperiment() {
 		return experiment;
 	}
 
-	public void setExperiment(Experiment experiment) {
+	public void setExperiment(WebPageExperiment experiment) {
 		this.experiment = experiment;
 	}
 

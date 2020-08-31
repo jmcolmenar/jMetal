@@ -1,46 +1,47 @@
 package jmetal.algorithms;
 
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.SteadyStateGeneticAlgorithm;
+import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.algorithm.singleobjective.evolutionstrategy.CovarianceMatrixAdaptationEvolutionStrategy;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
+import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.solution.DoubleSolution;
 
-import jmetal.javaclass.WebPageExperiment;
 import jmetal.javaclass.Result;
+import jmetal.javaclass.WebPageExperiment;
 import jmetal.javarepository.ResultRepository;
 
 /**
  * 
  * @author Harender
+ *
  */
 
 @SuppressWarnings("serial")
-public class SteadyStateGeneticAlgorithmWebFormat<S extends Solution<?>> extends SteadyStateGeneticAlgorithm<S> {
+public class CovarianceMatrixAdaptationEvolutionStrategyWebPage /*extends CovarianceMatrixAdaptationEvolutionStrategy*/{
+
 	@Autowired
 	private ResultRepository resultRepository;
 	private WebPageExperiment experiment;
 
 	private int maxEvaluations;
 	private int evaluations;
+	private int lambda;
 
 	/**
 	 * Constructor
-	 */
-	public SteadyStateGeneticAlgorithmWebFormat(ResultRepository resultRepository,WebPageExperiment experimentName,
-			Problem<S> problem, int maxEvaluations, int populationSize,
-			CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
-			SelectionOperator<List<S>, S> selectionOperator) {
-		super(problem,maxEvaluations,populationSize,crossoverOperator,mutationOperator,selectionOperator);
+	 *//*
+	public CovarianceMatrixAdaptationEvolutionStrategyWebPage(ResultRepository resultRepository,WebPageExperiment experimentName,
+			Builder builder) {
+		super(builder);
 		this.resultRepository=resultRepository;
 		this.experiment = experimentName;
-		
-		this.maxEvaluations = maxEvaluations;
-
 	}
 
 	@Override
@@ -51,12 +52,13 @@ public class SteadyStateGeneticAlgorithmWebFormat<S extends Solution<?>> extends
 	@Override
 	public void updateProgress() {
 		rightResult();
-		evaluations++;
+		evaluations += lambda;
+	    updateInternalParameters();
 
 	}
 
 	public void rightResult() {
 		Result resultSave = new Result((getResult().getObjective(0)*-1), experiment);
 		resultRepository.save(resultSave);
-	}
+	}*/
 }

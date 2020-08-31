@@ -9,9 +9,9 @@ import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 
-import jmetal.javaclass.Experiment;
+import jmetal.javaclass.WebPageExperiment;
 import jmetal.javaclass.Result;
-import jmetal.javaropository.ResultRepository;
+import jmetal.javarepository.ResultRepository;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import java.util.List;
 public class GenerationalGeneticAlgorithmWebFormet<S extends Solution<?>> extends GenerationalGeneticAlgorithm<S> {
 	@Autowired
 	private ResultRepository resultRepository;
-	private Experiment experiment;
+	private WebPageExperiment experiment;
 	
 	private int maxEvaluations;
 	private int evaluations;
@@ -33,14 +33,13 @@ public class GenerationalGeneticAlgorithmWebFormet<S extends Solution<?>> extend
 	/**
 	 * Constructor
 	 */
-	public GenerationalGeneticAlgorithmWebFormet(ResultRepository resultRepository,Experiment experimentName,
+	public GenerationalGeneticAlgorithmWebFormet(ResultRepository resultRepository,WebPageExperiment experimentName,
 			Problem<S> problem, int maxEvaluations, int populationSize,
 			CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
 			SelectionOperator<List<S>, S> selectionOperator, SolutionListEvaluator<S> evaluator) {
 		super(problem,maxEvaluations,populationSize,crossoverOperator,mutationOperator,selectionOperator,evaluator);
 		this.resultRepository=resultRepository;
 		this.experiment = experimentName;
-		
 		this.maxEvaluations = maxEvaluations;
 
 	}

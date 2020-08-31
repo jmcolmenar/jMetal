@@ -1,48 +1,43 @@
 package jmetal.algorithms;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.SteadyStateGeneticAlgorithm;
-import org.uma.jmetal.operator.CrossoverOperator;
+import org.uma.jmetal.algorithm.singleobjective.evolutionstrategy.ElitistEvolutionStrategy;
 import org.uma.jmetal.operator.MutationOperator;
-import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.Solution;
 
-import jmetal.javaclass.WebPageExperiment;
 import jmetal.javaclass.Result;
+import jmetal.javaclass.WebPageExperiment;
 import jmetal.javarepository.ResultRepository;
 
 /**
  * 
  * @author Harender
+ *
  */
 
 @SuppressWarnings("serial")
-public class SteadyStateGeneticAlgorithmWebFormat<S extends Solution<?>> extends SteadyStateGeneticAlgorithm<S> {
+public class ElitistEvolutionStrategyWebPage<S extends Solution<?>>  extends ElitistEvolutionStrategy<S>{
+
 	@Autowired
 	private ResultRepository resultRepository;
 	private WebPageExperiment experiment;
 
 	private int maxEvaluations;
 	private int evaluations;
-
+	private int lambda;
 	/**
 	 * Constructor
 	 */
-	public SteadyStateGeneticAlgorithmWebFormat(ResultRepository resultRepository,WebPageExperiment experimentName,
-			Problem<S> problem, int maxEvaluations, int populationSize,
-			CrossoverOperator<S> crossoverOperator, MutationOperator<S> mutationOperator,
-			SelectionOperator<List<S>, S> selectionOperator) {
-		super(problem,maxEvaluations,populationSize,crossoverOperator,mutationOperator,selectionOperator);
+	public ElitistEvolutionStrategyWebPage(ResultRepository resultRepository,WebPageExperiment experimentName,
+			Problem<S> problem, int mu, int lambda, int maxEvaluations,	MutationOperator<S> mutation) {
+		super(problem, mu, lambda, maxEvaluations, mutation);
 		this.resultRepository=resultRepository;
 		this.experiment = experimentName;
-		
 		this.maxEvaluations = maxEvaluations;
-
+		this.lambda = lambda;
 	}
-
+	
 	@Override
 	protected boolean isStoppingConditionReached() {
 		return (evaluations >= maxEvaluations);
@@ -51,7 +46,7 @@ public class SteadyStateGeneticAlgorithmWebFormat<S extends Solution<?>> extends
 	@Override
 	public void updateProgress() {
 		rightResult();
-		evaluations++;
+		evaluations += lambda;
 
 	}
 
