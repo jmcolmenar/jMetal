@@ -8,21 +8,17 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import jmetal.javaclass.Parameter;
 import jmetal.javaclass.WebPageAlgorithm;
 import jmetal.javaclass.WebPageCrossover;
-import jmetal.javaclass.WebPageExperiment;
 import jmetal.javaclass.WebPageMutation;
-import jmetal.javaclass.Parameter;
 import jmetal.javaclass.WebPageProblem;
-import jmetal.javaclass.Result;
 import jmetal.javaclass.WebPageSelection;
 import jmetal.javarepository.AlgorithmRepository;
 import jmetal.javarepository.CrossoverRepository;
-import jmetal.javarepository.ExperimentRepository;
 import jmetal.javarepository.MutationRepository;
 import jmetal.javarepository.ParameterRepository;
 import jmetal.javarepository.ProblemRepository;
-import jmetal.javarepository.ResultRepository;
 import jmetal.javarepository.SelectionRepository;
 
 /**
@@ -34,10 +30,6 @@ import jmetal.javarepository.SelectionRepository;
 @RestController
 public class DatabaseInformationLoader {
 
-	@Autowired
-	private ExperimentRepository experimentRepository;
-	@Autowired
-	private ResultRepository resultRepository;
 	@Autowired
 	private ParameterRepository parameterRepository;
 	@Autowired
@@ -59,29 +51,6 @@ public class DatabaseInformationLoader {
 		createMutationData();
 		createSelectionData();
 		createAlgoritmsData();
-
-		if (experimentRepository.count() == 0) {
-			
-			WebPageAlgorithm algoEx1 = algorithmRepository.getOne(1L);
-			WebPageProblem probEx1 = problemRepository.getOne(1L);
-			WebPageCrossover crossEx1 = crossoverRepository.findOne(1L);
-			WebPageMutation mutEx1 = mutationRepository.findOne(1L);
-			WebPageSelection selEx1 = selectionRepository.findOne(1L);
-			WebPageExperiment exp = new WebPageExperiment("test0", algoEx1, probEx1, crossEx1, mutEx1, selEx1,1);
-			experimentRepository.save(exp);
-	
-			Result r1 = new Result(4, exp);
-			Result r2 = new Result(5, exp);
-			Result r3 = new Result(6, exp);
-			Result r4 = new Result(7, exp);
-			Result r5 = new Result(8, exp);
-	
-			resultRepository.save(r1);
-			resultRepository.save(r2);
-			resultRepository.save(r3);
-			resultRepository.save(r4);
-			resultRepository.save(r5);
-		}
 	}
 
 	private void createAlgoritmsData() {
