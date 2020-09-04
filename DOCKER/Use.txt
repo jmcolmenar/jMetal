@@ -1,0 +1,2 @@
+To use the jmetal-webpage by docker you have to download the Docker, and then you have to download the "docker-compose.yml" file from this folder.
+After that you have to situate in folder which contains the file "docker-compose.yml" with powershell and run the command "docker-compose up".
