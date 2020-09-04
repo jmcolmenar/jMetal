@@ -8,8 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.singleobjective.evolutionstrategy.CovarianceMatrixAdaptationEvolutionStrategy;
-import org.uma.jmetal.algorithm.singleobjective.evolutionstrategy.CovarianceMatrixAdaptationEvolutionStrategy.Builder;
+import jmetal.algorithms.CovarianceMatrixAdaptationEvolutionStrategyWebPage.Builder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
@@ -576,22 +575,23 @@ public class ExperiementCreateController  {
 						
 					case "CovarianceMatrixAdaptationEvolutionStrategy":	
 						Algorithm<DoubleSolution> algorithmCMA;
+
 						if((parameter.get("lambda")!= null) && parameter.get("maxEvaluations") != null && parameter.get("sigma") != null ) {
 							Builder builder = new Builder(problemDS);
 							
 							builder.setLambda(Integer.parseInt(parameter.get("lambda").getParameterValue()));
 							builder.setMaxEvaluations(Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()));
 							builder.setSigma(Double.parseDouble(parameter.get("sigma").getParameterValue()));
-//							algorithmCMA = new CovarianceMatrixAdaptationEvolutionStrategyWebPage(resultRepository, experiment, builder);
+							algorithmCMA = new CovarianceMatrixAdaptationEvolutionStrategyWebPage(resultRepository, experiment, builder);
 						}else {
 							Builder builder = new Builder(problemDS);
-//							algorithmCMA = new CovarianceMatrixAdaptationEvolutionStrategyWebPage(resultRepository, experiment, builder);
+							algorithmCMA = new CovarianceMatrixAdaptationEvolutionStrategyWebPage(resultRepository, experiment, builder);
 							
 						}
-//						new AlgorithmRunner.Executor(algorithmCMA).execute() ;
-//		
-//					    result = algorithmCMA.getResult().getObjective(0);
-//					    populationDS = algorithmCMA.getResult().getVariables();
+						new AlgorithmRunner.Executor(algorithmCMA).execute() ;
+		
+					    result = algorithmCMA.getResult().getObjective(0);
+					    populationDS = algorithmCMA.getResult().getVariables();
 					    
 						break;
 						
