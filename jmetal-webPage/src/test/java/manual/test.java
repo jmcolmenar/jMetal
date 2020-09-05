@@ -1,10 +1,11 @@
-package jmetal.algorithms;
+package manual;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.algorithm.singleobjective.coralreefsoptimization.CoralReefsOptimizationBuilder;
 import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionBuilder;
 import org.uma.jmetal.algorithm.singleobjective.evolutionstrategy.CovarianceMatrixAdaptationEvolutionStrategy;
 import org.uma.jmetal.algorithm.singleobjective.particleswarmoptimization.StandardPSO2007;
@@ -12,23 +13,34 @@ import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
+import org.uma.jmetal.operator.impl.crossover.IntegerSBXCrossover;
+import org.uma.jmetal.operator.impl.crossover.NPointCrossover;
 import org.uma.jmetal.operator.impl.crossover.SinglePointCrossover;
 import org.uma.jmetal.operator.impl.mutation.BitFlipMutation;
+import org.uma.jmetal.operator.impl.mutation.IntegerPolynomialMutation;
+import org.uma.jmetal.operator.impl.mutation.NullMutation;
+import org.uma.jmetal.operator.impl.selection.BestSolutionSelection;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
 import org.uma.jmetal.problem.BinaryProblem;
 import org.uma.jmetal.problem.DoubleProblem;
+import org.uma.jmetal.problem.IntegerProblem;
+import org.uma.jmetal.problem.singleobjective.NIntegerMin;
 import org.uma.jmetal.problem.singleobjective.OneMax;
 import org.uma.jmetal.problem.singleobjective.Sphere;
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.DoubleSolution;
+import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.MultithreadedSolutionListEvaluator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
+import jmetal.algorithms.CoralReefsOptimizationWebPage;
+import jmetal.algorithms.CovarianceMatrixAdaptationEvolutionStrategyWebPage;
 import jmetal.algorithms.CovarianceMatrixAdaptationEvolutionStrategyWebPage.Builder;
+import jmetal.algorithms.GenerationalGeneticAlgorithmWebFormet;
 
 public class test {
 	/**
@@ -131,31 +143,25 @@ public class test {
 
 	public static void main(String[] args) throws Exception {
 
-		Algorithm<DoubleSolution> algorithm;
-		DoubleProblem problem = new Sphere();
-		Builder builder = new Builder(problem);
-		builder.setLambda(7);
-		builder.setSigma(10);
-		builder.setMaxEvaluations(250);
+		Algorithm<IntegerSolution> algorithm;
+		IntegerProblem problem = new NIntegerMin(32, 8, 1, 50);
 
-		algorithm = new CovarianceMatrixAdaptationEvolutionStrategyWebPage(null, null, builder);
-		// .Builder(problem)
-		// .build() ;
+		CrossoverOperator<IntegerSolution> crossoverOperator = new NPointCrossover(1);
+		MutationOperator<IntegerSolution> mutationOperator = new NullMutation();
+		SelectionOperator<List<IntegerSolution>, IntegerSolution> selectionOperator = new BestSolutionSelection<IntegerSolution>(new ObjectiveComparator<>(problem.getNumberOfObjectives()));
 
-//		 algorithm = new CovarianceMatrixAdaptationEvolutionStrategyWebPage
-//		 .Builder(problem)
-//		 .build() ;
+		algorithm = new GenerationalGeneticAlgorithmWebFormet<IntegerSolution>(null, null, problem, 2500, 100, crossoverOperator, mutationOperator, selectionOperator, new SequentialSolutionListEvaluator<IntegerSolution>());
 
+		
 		new AlgorithmRunner.Executor(algorithm).execute();
 
-		DoubleSolution solution = algorithm.getResult();
-		List<DoubleSolution> population = new ArrayList<>(1);
-		population.add(solution);
+//		DoubleSolution solution = algorithm.getResult();
+		IntegerSolution population = algorithm.getResult();
 		System.out.println("--------------------------");
-		System.out.println(solution);
-		System.out.println(solution.getNumberOfVariables());
-		System.out.println(solution.getVariables());
-		System.out.println(solution.getObjective(0));
+		System.out.println(population);
+		System.out.println(population.getNumberOfVariables());
+		System.out.println(population.getVariables());
+		System.out.println(population.getObjective(0));
 
 	}
 

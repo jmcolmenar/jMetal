@@ -59,7 +59,7 @@ public class CoralReefsOptimizationWebPage <S extends Solution<?>> extends Coral
 	}
 
 	public void rightResult() {
-		Result resultSave = new Result((getResult().get(0).getObjective(0)*-1), experiment);
+		Result resultSave = new Result((getResult().get(0).getObjective(0)), experiment);
 		resultRepository.save(resultSave);
 	}
 }

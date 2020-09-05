@@ -655,10 +655,6 @@ public class ExperiementCreateController  {
 				}
 				break;
 
-			case "CEC2005Problem":
-				problemToReturn = (Problem<T>) new CEC2005Problem(Integer.parseInt(parameter.get("problemID").getParameterValue()),Integer.parseInt(parameter.get("numberOfVariables").getParameterValue()));
-				break;
-
 			case "Griewank":
 				problemToReturn = (Problem<T>) new Griewank(Integer.parseInt(parameter.get("numberOfVariables").getParameterValue()));
 				break;

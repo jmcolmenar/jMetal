@@ -1050,20 +1050,8 @@ public class DatabaseInformationLoader {
 
 	private void createProblemsData() {
 		if (problemRepository.count() == 0) {
-			Parameter par1 = new Parameter("int", "problemID");
-			Parameter par2 = new Parameter("int", "numberOfVariables");
-
-			parameterRepository.save(par1);
-			parameterRepository.save(par2);
 
 			List<Parameter> parameterLists = new LinkedList<Parameter>();
-			parameterLists.add(par1);
-			parameterLists.add(par2);
-
-			// ----------------------------------------CEC2005Problem-----------------------------------
-			WebPageProblem pro1 = new WebPageProblem("org.uma.jmetal.problem.singleobjective.CEC2005Problem",
-					"DoubleSolution", 2, true, parameterLists);
-			problemRepository.save(pro1);
 
 			// ----------------------------------------Griewank-----------------------------------
 			parameterLists.clear();
