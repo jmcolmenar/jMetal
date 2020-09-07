@@ -2,45 +2,20 @@ package manual;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 import org.uma.jmetal.algorithm.Algorithm;
-import org.uma.jmetal.algorithm.singleobjective.coralreefsoptimization.CoralReefsOptimizationBuilder;
-import org.uma.jmetal.algorithm.singleobjective.differentialevolution.DifferentialEvolutionBuilder;
-import org.uma.jmetal.algorithm.singleobjective.evolutionstrategy.CovarianceMatrixAdaptationEvolutionStrategy;
-import org.uma.jmetal.algorithm.singleobjective.particleswarmoptimization.StandardPSO2007;
+import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GeneticAlgorithmBuilder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
-import org.uma.jmetal.operator.impl.crossover.DifferentialEvolutionCrossover;
-import org.uma.jmetal.operator.impl.crossover.IntegerSBXCrossover;
-import org.uma.jmetal.operator.impl.crossover.NPointCrossover;
-import org.uma.jmetal.operator.impl.crossover.SinglePointCrossover;
-import org.uma.jmetal.operator.impl.mutation.BitFlipMutation;
-import org.uma.jmetal.operator.impl.mutation.IntegerPolynomialMutation;
-import org.uma.jmetal.operator.impl.mutation.NullMutation;
-import org.uma.jmetal.operator.impl.selection.BestSolutionSelection;
+import org.uma.jmetal.operator.impl.crossover.PMXCrossover;
+import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
-import org.uma.jmetal.operator.impl.selection.DifferentialEvolutionSelection;
-import org.uma.jmetal.problem.BinaryProblem;
-import org.uma.jmetal.problem.DoubleProblem;
-import org.uma.jmetal.problem.IntegerProblem;
-import org.uma.jmetal.problem.singleobjective.NIntegerMin;
-import org.uma.jmetal.problem.singleobjective.OneMax;
-import org.uma.jmetal.problem.singleobjective.Sphere;
-import org.uma.jmetal.solution.BinarySolution;
-import org.uma.jmetal.solution.DoubleSolution;
-import org.uma.jmetal.solution.IntegerSolution;
+import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
-import org.uma.jmetal.util.comparator.ObjectiveComparator;
-import org.uma.jmetal.util.evaluator.SolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.MultithreadedSolutionListEvaluator;
-import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
-import jmetal.algorithms.CoralReefsOptimizationWebPage;
-import jmetal.algorithms.CovarianceMatrixAdaptationEvolutionStrategyWebPage;
-import jmetal.algorithms.CovarianceMatrixAdaptationEvolutionStrategyWebPage.Builder;
-import jmetal.algorithms.GenerationalGeneticAlgorithmWebFormet;
+import jmetal.problems.TSPWebPage;
 
 public class test {
 	/**
@@ -143,25 +118,37 @@ public class test {
 
 	public static void main(String[] args) throws Exception {
 
-		Algorithm<IntegerSolution> algorithm;
-		IntegerProblem problem = new NIntegerMin(32, 8, 1, 50);
+		Problem<PermutationSolution<Integer>> problem;
+	    Algorithm<PermutationSolution<Integer>> algorithm;
+	    CrossoverOperator<PermutationSolution<Integer>> crossover;
+	    MutationOperator<PermutationSolution<Integer>> mutation;
+	    SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
 
-		CrossoverOperator<IntegerSolution> crossoverOperator = new NPointCrossover(1);
-		MutationOperator<IntegerSolution> mutationOperator = new NullMutation();
-		SelectionOperator<List<IntegerSolution>, IntegerSolution> selectionOperator = new BestSolutionSelection<IntegerSolution>(new ObjectiveComparator<>(problem.getNumberOfObjectives()));
+	    problem = new TSPWebPage("/TSPFiles/test.tsp");
 
-		algorithm = new GenerationalGeneticAlgorithmWebFormet<IntegerSolution>(null, null, problem, 2500, 100, crossoverOperator, mutationOperator, selectionOperator, new SequentialSolutionListEvaluator<IntegerSolution>());
+	    crossover = new PMXCrossover(0.9) ;
 
-		
-		new AlgorithmRunner.Executor(algorithm).execute();
+	    double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
+	    mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
 
-//		DoubleSolution solution = algorithm.getResult();
-		IntegerSolution population = algorithm.getResult();
-		System.out.println("--------------------------");
-		System.out.println(population);
-		System.out.println(population.getNumberOfVariables());
-		System.out.println(population.getVariables());
-		System.out.println(population.getObjective(0));
+	    selection = new BinaryTournamentSelection<PermutationSolution<Integer>>();
+
+	    algorithm = new GeneticAlgorithmBuilder<>(problem, crossover, mutation)
+	            .setPopulationSize(100)
+	            .setMaxEvaluations(250000)
+	            .setSelectionOperator(selection)
+	            .build() ;
+
+	    AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
+	            .execute() ;
+
+	    PermutationSolution<Integer> solution = algorithm.getResult() ;
+	    List<PermutationSolution<Integer>> population = new ArrayList<>(1) ;
+	    population.add(solution) ;
+
+	    long computingTime = algorithmRunner.getComputingTime() ;
+
+	    System.out.println(solution);
 
 	}
 

@@ -121,11 +121,17 @@ public class ApiExperiments {
 	@ResponseBody
 	public String getCrossoverList(@PathVariable String resultType, @PathVariable String crossover) {
 		String[] results = resultType.split("-");
+		System.out.println(results.length);
+		System.out.println(results[results.length-2]+"-"+results[results.length-1]);
 		List<WebPageCrossover>	crossoverList;
-		if (crossover.equals("DifferentialEvolutionCrossover")) {
-			crossoverList= crossoverRepository.findByName(crossover);
-		} else {
-			crossoverList= crossoverRepository.findBySolutionType(results[results.length-1]);
+		if ((results.length >3) && (results[results.length-2].equals("PermutationSolution")) ){
+			crossoverList= crossoverRepository.findBySolutionPermutation(results[results.length-2]+"-"+results[results.length-1]);
+		}else {
+			if (crossover.equals("DifferentialEvolutionCrossover")) {
+				crossoverList= crossoverRepository.findByName(crossover);
+			} else {
+				crossoverList= crossoverRepository.findBySolutionType(results[results.length-1]);
+			}
 		}
 		
 		JSONArray jsonCrossoverName = new JSONArray();
@@ -162,8 +168,12 @@ public class ApiExperiments {
 	@ResponseBody
 	public String getMutationList(@PathVariable String resultType) {
 		String[] results = resultType.split("-");
-		List<WebPageMutation> mutationList= mutationRepository.findBySolutionType(results[results.length-1]);
-		
+		List<WebPageMutation> mutationList;
+		if ((results.length >3) && (results[results.length-2].equals("PermutationSolution")) ){
+			mutationList = mutationRepository.findBySolutionPermutation(results[results.length-2]+"-"+results[results.length-1]);
+		}else {
+			mutationList = mutationRepository.findBySolutionType(results[results.length-1]);
+		}
 		JSONArray jsonMutationName = new JSONArray();
 		for (WebPageMutation mutation : mutationList) {
 			jsonMutationName.put(mutation);
@@ -198,11 +208,16 @@ public class ApiExperiments {
 	@ResponseBody
 	public String getSelectionList(@PathVariable String resultType, @PathVariable String listType) {
 		String[] results = resultType.split("-");
+		System.out.println(results[results.length-1]);
 		List<WebPageSelection>	selectionList;
-		if (listType.equals("DifferentialEvolutionSelection")) {
-			selectionList= selectionRepository.findByName(listType);
-		} else {
-			selectionList = selectionRepository.findBySolutionAndListType(results[results.length-1], listType);
+		if ((results.length >3) && (results[results.length-2].equals("PermutationSolution")) ){
+			selectionList = selectionRepository.findBySolutionPermutationAndListType(results[results.length-2]+"-"+results[results.length-1], listType);
+		}else {
+			if (listType.equals("DifferentialEvolutionSelection")) {
+				selectionList= selectionRepository.findByName(listType);
+			} else {
+				selectionList = selectionRepository.findBySolutionAndListType(results[results.length-1], listType);
+			}
 		}
 		JSONArray jsonSelectionName = new JSONArray();
 		for (WebPageSelection selection : selectionList) {

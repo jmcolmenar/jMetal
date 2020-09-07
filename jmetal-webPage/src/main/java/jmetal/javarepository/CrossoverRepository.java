@@ -23,6 +23,9 @@ public interface CrossoverRepository extends JpaRepository<WebPageCrossover, Lon
 	@Query(value = "SELECT * FROM crossovers WHERE solution_type in ('GENERIC', ?1) AND solution_type != 'null' AND crossover_name <> 'DifferentialEvolutionCrossover'", nativeQuery = true)
 	List<WebPageCrossover> findBySolutionType(String solutionType);
 	
+	@Query(value = "SELECT * FROM crossovers WHERE solution_type in ('GENERIC', 'PermutationSolution', ?1) AND solution_type != 'null' AND crossover_name <> 'DifferentialEvolutionCrossover'", nativeQuery = true)
+	List<WebPageCrossover> findBySolutionPermutation(String solutionType);
+	
 	@Query(value = "SELECT * FROM crossovers WHERE crossover_name = ?1 AND solution_type != 'null'", nativeQuery = true)
 	List<WebPageCrossover> findByName(String name);
 }

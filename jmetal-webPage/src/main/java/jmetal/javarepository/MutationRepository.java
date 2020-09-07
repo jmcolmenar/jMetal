@@ -21,4 +21,7 @@ public interface MutationRepository extends JpaRepository<WebPageMutation, Long>
 	 */
 	@Query(value = "SELECT * FROM mutations WHERE solution_type in ('GENERIC', ?1) AND solution_type != 'null'", nativeQuery = true)
 	List<WebPageMutation> findBySolutionType(String solutionType);
+	
+	@Query(value = "SELECT * FROM mutations WHERE solution_type in ('GENERIC', 'PermutationSolution', ?1) AND solution_type != 'null'", nativeQuery = true)
+	List<WebPageMutation> findBySolutionPermutation(String solutionType);
 }

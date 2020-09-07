@@ -2,6 +2,7 @@ $.ajax({
 	url : 'experimentPage',
 	success : function(result) {
 		hideAll();
+		$("#TSPsSelection").hide();
 		getProblems();
 	}
 });
@@ -12,6 +13,7 @@ function hideAll(){
 	$("#crossoverOperator").hide();
 	$("#mutationOperator").hide();
 	$("#selectionOperator").hide();
+	
 }
 
 function getProblems() {
@@ -28,6 +30,7 @@ function getProblems() {
 function getAlgorithms() {
 	var solutionType = document.getElementById('selectProblem').value;
 	hideAll();
+	$("#TSPsSelection").hide();
 	$("#algorithms").show();
 	$.get("/getAlgorithmsList/"+solutionType, function(result) {
 		
@@ -121,6 +124,8 @@ function setParams(params,paramsTypes){
 			y.setAttribute("class", "form-control");
 			
 			paramsDiv.appendChild(y);
+		}else if(par[0] == "distanceFile"){
+			showTSPs();
 		}else if (par[1] != "MutationOperator" && par[1] != "CrossoverOperator" && par[1] != "SelectionOperator" && par[1] != "DifferentialEvolutionCrossover" && par[1] != "DifferentialEvolutionSelection"){
 			var y = document.createElement("INPUT");
 			y.setAttribute("type", "text");
@@ -219,4 +224,23 @@ function setSelectionParams() {
 		setParams(selectionParams,typeParam);
 	});
 	
+}
+
+function showTSPs() {
+	
+	$.get("/getTSPs", function(result) {
+		var TSPs = (JSON.parse(result).TSPsName);
+		var tspSelection = document.getElementById("TSPs");
+		for (var i = 0; i < TSPs.length; i++) {
+			
+			var TSPOp = tspSelection.getElementsByTagName("OPTION");
+		    while(TSPOp.length >0){
+		    	TSPOp[0].remove();
+		    }
+			for (x in TSPs) {
+				tspSelection.options[tspSelection.options.length] = new Option(TSPs[x], TSPs[x]);
+			}
+		}
+	});
+	$("#TSPsSelection").show();
 }

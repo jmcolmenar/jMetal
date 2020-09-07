@@ -424,7 +424,7 @@ public class DatabaseInformationLoader {
 			mutationRepository.save(mu1);
 
 			Parameter par2 = new Parameter("double", "mutationProbability");
-			Parameter par3 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par3 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par2);
 			parameterRepository.save(par3);
 			parameterLists.clear();
@@ -443,7 +443,7 @@ public class DatabaseInformationLoader {
 			mutationRepository.save(mu3);
 
 			Parameter par5 = new Parameter("double", "mutationProbability");
-			Parameter par6 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par6 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par5);
 			parameterRepository.save(par6);
 			parameterLists.clear();
@@ -453,7 +453,7 @@ public class DatabaseInformationLoader {
 			mutationRepository.save(mu4);
 
 			Parameter par10 = new Parameter("double", "mutationProbability");
-			Parameter par11 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par11 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			Parameter par12 = new Parameter("BoundedRandomGenerator-Integer", "jRandomGenerator");
 			parameterRepository.save(par10);
 			parameterRepository.save(par11);
@@ -498,7 +498,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par17 = new Parameter("double", "mutationProbability");
 			Parameter par18 = new Parameter("double", "delta");
-			Parameter par19 = new Parameter("RepairDoubleSolution", "solutionRepair");
+			Parameter par19 = new Parameter("RepairDoubleSolution", "mutationSolutionRepair");
 			parameterRepository.save(par17);
 			parameterRepository.save(par18);
 			parameterRepository.save(par19);
@@ -527,7 +527,7 @@ public class DatabaseInformationLoader {
 			Parameter par23 = new Parameter("double", "mutationProbability");
 			Parameter par24 = new Parameter("double", "perturbation");
 			Parameter par25 = new Parameter("int", "maxIterations");
-			Parameter par26 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par26 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par23);
 			parameterRepository.save(par24);
 			parameterRepository.save(par25);
@@ -553,7 +553,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par29 = new Parameter("DoubleProblem", "problem");
 			Parameter par30 = new Parameter("double", "distributionIndex");
-			Parameter par31 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par31 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par29);
 			parameterRepository.save(par30);
 			parameterRepository.save(par31);
@@ -576,7 +576,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par34 = new Parameter("double", "mutationProbability");
 			Parameter par35 = new Parameter("double", "distributionIndex");
-			Parameter par36 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par36 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par34);
 			parameterRepository.save(par35);
 			parameterRepository.save(par36);
@@ -589,7 +589,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par37 = new Parameter("double", "mutationProbability");
 			Parameter par38 = new Parameter("double", "distributionIndex");
-			Parameter par39 = new Parameter("RepairDoubleSolution", "solutionRepair");
+			Parameter par39 = new Parameter("RepairDoubleSolution", "mutationSolutionRepair");
 			parameterRepository.save(par37);
 			parameterRepository.save(par38);
 			parameterRepository.save(par39);
@@ -602,8 +602,8 @@ public class DatabaseInformationLoader {
 
 			Parameter par40 = new Parameter("double", "mutationProbability");
 			Parameter par41 = new Parameter("double", "distributionIndex");
-			Parameter par42 = new Parameter("RepairDoubleSolution", "solutionRepair");
-			Parameter par43 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par42 = new Parameter("RepairDoubleSolution", "mutationSolutionRepair");
+			Parameter par43 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par40);
 			parameterRepository.save(par41);
 			parameterRepository.save(par42);
@@ -626,7 +626,7 @@ public class DatabaseInformationLoader {
 			mutationRepository.save(mu19);
 
 			Parameter par45 = new Parameter("double", "mutationProbability");
-			Parameter par46 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par46 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par45);
 			parameterRepository.save(par46);
 			parameterLists.clear();
@@ -649,7 +649,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par49 = new Parameter("double", "mutationProbability");
 			Parameter par50 = new Parameter("double", "perturbation");
-			Parameter par51 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par51 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par49);
 			parameterRepository.save(par50);
 			parameterRepository.save(par51);
@@ -686,7 +686,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par56 = new Parameter("double", "mutationProbability");
 			Parameter par57 = new Parameter("double", "distributionIndex");
-			Parameter par58 = new Parameter("RepairDoubleSolution", "solutionRepair");
+			Parameter par58 = new Parameter("RepairDoubleSolution", "mutationSolutionRepair");
 			parameterRepository.save(par56);
 			parameterRepository.save(par57);
 			parameterRepository.save(par58);
@@ -700,8 +700,8 @@ public class DatabaseInformationLoader {
 
 			Parameter par59 = new Parameter("double", "mutationProbability");
 			Parameter par60 = new Parameter("double", "distributionIndex");
-			Parameter par61 = new Parameter("RepairDoubleSolution", "solutionRepair");
-			Parameter par62 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par61 = new Parameter("RepairDoubleSolution", "mutationSolutionRepair");
+			Parameter par62 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par59);
 			parameterRepository.save(par60);
 			parameterRepository.save(par61);
@@ -741,7 +741,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par4 = new Parameter("double", "crossoverProbability");
 			Parameter par5 = new Parameter("double", "alpha");
-			Parameter par6 = new Parameter("RepairDoubleSolution", "solutionRepair");
+			Parameter par6 = new Parameter("RepairDoubleSolution", "crossoverSolutionRepair");
 			parameterRepository.save(par4);
 			parameterRepository.save(par5);
 			parameterRepository.save(par6);
@@ -754,8 +754,8 @@ public class DatabaseInformationLoader {
 
 			Parameter par7 = new Parameter("double", "crossoverProbability");
 			Parameter par8 = new Parameter("double", "alpha");
-			Parameter par9 = new Parameter("RepairDoubleSolution", "solutionRepair");
-			Parameter par10 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par9 = new Parameter("RepairDoubleSolution", "crossoverSolutionRepair");
+			Parameter par10 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			parameterRepository.save(par7);
 			parameterRepository.save(par8);
 			parameterRepository.save(par9);
@@ -792,7 +792,7 @@ public class DatabaseInformationLoader {
 			Parameter par14 = new Parameter("double", "crossoverProbability");
 			Parameter par15 = new Parameter("double", "f");
 			Parameter par16 = new Parameter("String", "variant");
-			Parameter par17 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par17 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			parameterRepository.save(par14);
 			parameterRepository.save(par15);
 			parameterRepository.save(par16);
@@ -860,7 +860,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par30 = new Parameter("double", "crossoverProbability");
 			Parameter par31 = new Parameter("double", "distributionIndex");
-			Parameter par32 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par32 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			parameterRepository.save(par30);
 			parameterRepository.save(par31);
 			parameterRepository.save(par32);
@@ -873,7 +873,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par33 = new Parameter("double", "crossoverProbability");
 			Parameter par34 = new Parameter("double", "distributionIndex");
-			Parameter par35 = new Parameter("RepairDoubleSolution", "solutionRepair");
+			Parameter par35 = new Parameter("RepairDoubleSolution", "crossoverSolutionRepair");
 			parameterRepository.save(par33);
 			parameterRepository.save(par34);
 			parameterRepository.save(par35);
@@ -886,8 +886,8 @@ public class DatabaseInformationLoader {
 
 			Parameter par36 = new Parameter("double", "crossoverProbability");
 			Parameter par37 = new Parameter("double", "distributionIndex");
-			Parameter par38 = new Parameter("RepairDoubleSolution", "solutionRepair");
-			Parameter par39 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par38 = new Parameter("RepairDoubleSolution", "crossoverSolutionRepair");
+			Parameter par39 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			parameterRepository.save(par36);
 			parameterRepository.save(par37);
 			parameterRepository.save(par38);
@@ -910,7 +910,7 @@ public class DatabaseInformationLoader {
 			crossoverRepository.save(cr14);
 
 			Parameter par41 = new Parameter("double", "crossoverProbability");
-			Parameter par42 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par42 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			parameterRepository.save(par41);
 			parameterRepository.save(par42);
 			parameterLists.clear();
@@ -929,7 +929,7 @@ public class DatabaseInformationLoader {
 			crossoverRepository.save(cr16);
 
 			Parameter par44 = new Parameter("double", "crossoverProbability");
-			Parameter par45 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par45 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			parameterRepository.save(par44);
 			parameterRepository.save(par45);
 			parameterLists.clear();
@@ -939,7 +939,7 @@ public class DatabaseInformationLoader {
 			crossoverRepository.save(cr17);
 
 			Parameter par46 = new Parameter("double", "crossoverProbability");
-			Parameter par47 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par47 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			Parameter par48 = new Parameter("BoundedRandomGenerator-Integer", "jRandomGenerator");
 			parameterRepository.save(par46);
 			parameterRepository.save(par47);
@@ -965,7 +965,7 @@ public class DatabaseInformationLoader {
 
 			Parameter par51 = new Parameter("double", "crossoverProbability");
 			Parameter par52 = new Parameter("double", "distributionIndex");
-			Parameter par53 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par53 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			parameterRepository.save(par51);
 			parameterRepository.save(par52);
 			parameterRepository.save(par53);
@@ -982,23 +982,23 @@ public class DatabaseInformationLoader {
 			parameterRepository.save(par54);
 			parameterLists.clear();
 			parameterLists.add(par54);
-			WebPageCrossover cr21 = new WebPageCrossover("PMXCrossover", "PermutacionSolucion-Integer", 1,
+			WebPageCrossover cr21 = new WebPageCrossover("PMXCrossover", "PermutationSolution-Integer", 1,
 					parameterLists);
 			crossoverRepository.save(cr21);
 
 			Parameter par55 = new Parameter("double", "crossoverProbability");
-			Parameter par56 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par56 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			parameterRepository.save(par55);
 			parameterRepository.save(par56);
 			parameterLists.clear();
 			parameterLists.add(par55);
 			parameterLists.add(par56);
-			WebPageCrossover cr22 = new WebPageCrossover("PMXCrossover", "PermutacionSolucion-Integer", 2,
+			WebPageCrossover cr22 = new WebPageCrossover("PMXCrossover", "PermutationSolution-Integer", 2,
 					parameterLists);
 			crossoverRepository.save(cr22);
 
 			Parameter par57 = new Parameter("double", "crossoverProbability");
-			Parameter par58 = new Parameter("RandomGenerator-Double", "randomGenerator");
+			Parameter par58 = new Parameter("RandomGenerator-Double", "crossoverRandomGenerator");
 			Parameter par59 = new Parameter("BoundedRandomGenerator-Integer", "jRandomGenerator");
 			parameterRepository.save(par57);
 			parameterRepository.save(par58);
@@ -1007,7 +1007,7 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par57);
 			parameterLists.add(par58);
 			parameterLists.add(par59);
-			WebPageCrossover cr23 = new WebPageCrossover("PMXCrossover", "PermutacionSolucion-Integer", 3,
+			WebPageCrossover cr23 = new WebPageCrossover("PMXCrossover", "PermutationSolution-Integer", 3,
 					parameterLists);
 			crossoverRepository.save(cr23);
 

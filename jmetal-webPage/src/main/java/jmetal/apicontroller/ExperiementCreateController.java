@@ -7,8 +7,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
 import org.uma.jmetal.algorithm.Algorithm;
-import jmetal.algorithms.CovarianceMatrixAdaptationEvolutionStrategyWebPage.Builder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
@@ -38,15 +38,14 @@ import org.uma.jmetal.operator.impl.selection.NaryRandomSelection;
 import org.uma.jmetal.operator.impl.selection.NaryTournamentSelection;
 import org.uma.jmetal.operator.impl.selection.RandomSelection;
 import org.uma.jmetal.operator.impl.selection.RankingAndCrowdingSelection;
-import org.uma.jmetal.operator.impl.selection.RankingAndDirScoreSelection;
 import org.uma.jmetal.operator.impl.selection.RankingAndPreferenceSelection;
 import org.uma.jmetal.operator.impl.selection.SpatialSpreadDeviationSelection;
 import org.uma.jmetal.operator.impl.selection.TournamentSelection;
 import org.uma.jmetal.problem.BinaryProblem;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.problem.IntegerProblem;
+import org.uma.jmetal.problem.PermutationProblem;
 import org.uma.jmetal.problem.Problem;
-import org.uma.jmetal.problem.singleobjective.CEC2005Problem;
 import org.uma.jmetal.problem.singleobjective.Griewank;
 import org.uma.jmetal.problem.singleobjective.NIntegerMin;
 import org.uma.jmetal.problem.singleobjective.OneMax;
@@ -57,19 +56,18 @@ import org.uma.jmetal.problem.singleobjective.TSP;
 import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.IntegerSolution;
-import org.uma.jmetal.solution.Solution;
+import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.solution.util.RepairDoubleSolutionAtBounds;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
-import org.uma.jmetal.util.fileinput.VectorFileUtils;
-import org.uma.jmetal.util.pseudorandom.BoundedRandomGenerator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
 import jmetal.algorithms.CoralReefsOptimizationWebPage;
 import jmetal.algorithms.CovarianceMatrixAdaptationEvolutionStrategyWebPage;
+import jmetal.algorithms.CovarianceMatrixAdaptationEvolutionStrategyWebPage.Builder;
 import jmetal.algorithms.DifferentialEvolutionWebPage;
 import jmetal.algorithms.ElitistEvolutionStrategyWebPage;
 import jmetal.algorithms.GenerationalGeneticAlgorithmWebFormet;
@@ -77,13 +75,12 @@ import jmetal.algorithms.NonElitistEvolutionStrategyWebPage;
 import jmetal.algorithms.StandardPSO2007WebPage;
 import jmetal.algorithms.StandardPSO2011WebPage;
 import jmetal.algorithms.SteadyStateGeneticAlgorithmWebFormat;
+import jmetal.javaclass.FinalResults;
+import jmetal.javaclass.Parameter;
 import jmetal.javaclass.WebPageAlgorithm;
 import jmetal.javaclass.WebPageCrossover;
 import jmetal.javaclass.WebPageExperiment;
-import jmetal.javaclass.WebPageProblem;
-import jmetal.javaclass.FinalResults;
 import jmetal.javaclass.WebPageMutation;
-import jmetal.javaclass.Parameter;
 import jmetal.javaclass.WebPageProblem;
 import jmetal.javaclass.WebPageSelection;
 import jmetal.javarepository.AlgorithmRepository;
@@ -95,6 +92,7 @@ import jmetal.javarepository.ParameterRepository;
 import jmetal.javarepository.ProblemRepository;
 import jmetal.javarepository.ResultRepository;
 import jmetal.javarepository.SelectionRepository;
+import jmetal.problems.TSPWebPage;
 
 
 public class ExperiementCreateController  {
@@ -211,8 +209,14 @@ public class ExperiementCreateController  {
 
 	public void createExperimentAndRun() {
 		double result = 0;
-		
-		switch (this.problem.getSolutionType()) {
+		String[] problemType = this.problem.getSolutionType().split("-");
+		String solutionType;
+		if (problemType.length > 1) {
+			solutionType = problemType[problemType.length-2];
+		}else {
+			solutionType = problemType[problemType.length-1];
+		}
+		switch (solutionType) {
 		case "BinarySolution":
 			List<BinarySet> populationBS = null;
 			Helper<BinarySolution> helperBS = new Helper<>();
@@ -627,6 +631,215 @@ public class ExperiementCreateController  {
 		    experiment.setFinalResult(finalResultDS);
 		    experimentRepository.save(experiment);
 			break;
+		
+		
+		case"PermutationSolution":
+			switch (problemType[problemType.length-1]) {
+			case "Integer":
+				List<Integer> populationPSI= null;
+				Helper<PermutationSolution<Integer>> helperPSI= new Helper<>();
+				Problem<PermutationSolution<Integer>> problemPSI= (Problem<PermutationSolution<Integer>>) helperPSI.setProblem(this.problem);
+				CrossoverOperator<PermutationSolution<Integer>> crossoverOperatorPSI= null;
+				MutationOperator<PermutationSolution<Integer>> mutationOperatorPSI= null;
+				if (this.crossoverOperator != null) {
+					crossoverOperatorPSI=  helperPSI.setCrossover(this.crossoverOperator);
+				}
+				if (this.mutationOperator != null) {
+					mutationOperatorPSI=  helperPSI.setMutation(this.mutationOperator,problemPSI);
+				}
+				
+				if (this.selectionOperator != null) {
+					if (singleListSelection.contains(this.selectionOperator.getSelectionName())) {
+						SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selectionOperatorDS =  helperPSI.setSingleListSelection(this.selectionOperator,problemPSI);				
+						
+						switch (this.algorithm.getAlgorithmName()) {
+						case "SteadyStateGeneticAlgorithm":
+							Algorithm<PermutationSolution<Integer>> algorithmSA = new SteadyStateGeneticAlgorithmWebFormat<PermutationSolution<Integer>>(resultRepository,experiment,problemPSI,
+									Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()),Integer.parseInt(parameter.get("populationSize").getParameterValue()),
+							          crossoverOperatorPSI, mutationOperatorPSI, selectionOperatorDS);
+							
+							new AlgorithmRunner.Executor(algorithmSA).execute() ;
+		
+							result = algorithmSA.getResult().getObjective(0);
+							populationPSI= algorithmSA.getResult().getVariables();
+						    
+							break;
+							
+						case "GenerationalGeneticAlgorithm":				
+							Algorithm<PermutationSolution<Integer>> algorithmGA = new GenerationalGeneticAlgorithmWebFormet<PermutationSolution<Integer>>(resultRepository,experiment,problemPSI,
+									Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()),Integer.parseInt(parameter.get("populationSize").getParameterValue()),
+							          crossoverOperatorPSI, mutationOperatorPSI, selectionOperatorDS, new SequentialSolutionListEvaluator<PermutationSolution<Integer>>());
+											
+							new AlgorithmRunner.Executor(algorithmGA).execute() ;
+		
+						    result = algorithmGA.getResult().getObjective(0);
+						    populationPSI= algorithmGA.getResult().getVariables();
+						    
+							break;
+							
+						case "CoralReefsOptimization":				
+							Algorithm<List<PermutationSolution<Integer>>> algorithmCOA = new CoralReefsOptimizationWebPage<PermutationSolution<Integer>>(resultRepository, experiment, problemPSI,
+									Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()), new ObjectiveComparator<PermutationSolution<Integer>>(0), 
+									selectionOperatorDS, crossoverOperatorPSI, mutationOperatorPSI, Integer.parseInt(parameter.get("n").getParameterValue()), Integer.parseInt(parameter.get("m").getParameterValue()), 
+									Double.parseDouble(parameter.get("rho").getParameterValue()), Double.parseDouble(parameter.get("fbs").getParameterValue()), Double.parseDouble(parameter.get("fa").getParameterValue()),
+									Double.parseDouble(parameter.get("pd").getParameterValue()), Integer.parseInt(parameter.get("attemptsToSettle").getParameterValue()));
+											
+							new AlgorithmRunner.Executor(algorithmCOA).execute() ;
+		
+						    result = algorithmCOA.getResult().get(0).getObjective(0);
+						    populationPSI= algorithmCOA.getResult().get(0).getVariables();
+						    
+							break;
+							
+						
+							
+						}
+					}else if(dobleListSelection.contains(this.selectionOperator.getSelectionName())){
+						SelectionOperator<List<PermutationSolution<Integer>>, List<PermutationSolution<Integer>>> selectionOperatorDS =  helperPSI.setdobleListSelection(this.selectionOperator,problemPSI);
+						
+					}
+				
+				}else {
+					
+					switch (this.algorithm.getAlgorithmName()) {
+						case "ElitistEvolutionStrategy":				
+							Algorithm<PermutationSolution<Integer>> algorithmESA = new ElitistEvolutionStrategyWebPage<PermutationSolution<Integer>>(resultRepository, experiment, problemPSI, Integer.parseInt(parameter.get("mu").getParameterValue()),
+									Integer.parseInt(parameter.get("lambda").getParameterValue()),Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()), mutationOperatorPSI);
+											
+							new AlgorithmRunner.Executor(algorithmESA).execute() ;
+			
+						    result = algorithmESA.getResult().getObjective(0);
+						    populationPSI= algorithmESA.getResult().getVariables();
+						    
+							break;
+							
+						case "NonElitistEvolutionStrategy":				
+							Algorithm<PermutationSolution<Integer>> algorithmNESA = new NonElitistEvolutionStrategyWebPage<PermutationSolution<Integer>>(resultRepository, experiment, problemPSI,Integer.parseInt(parameter.get("mu").getParameterValue()),
+									Integer.parseInt(parameter.get("lambda").getParameterValue()),Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()), mutationOperatorPSI);
+											
+							new AlgorithmRunner.Executor(algorithmNESA).execute() ;
+			
+						    result = algorithmNESA.getResult().getObjective(0);
+						    populationPSI= algorithmNESA.getResult().getVariables();
+						    
+							break;	
+					}		
+				}
+				
+				String finalPopulationPSI= populationPSI.toString();
+			    
+			    FinalResults finalResultPSI= new FinalResults(experiment, result, finalPopulationPSI);
+			    finalResultsRepository.save(finalResultPSI);
+			
+			    experiment.setFinalResult(finalResultPSI);
+			    experimentRepository.save(experiment);
+				break;
+
+			case "Double":
+				List<Double> populationPSD = null;
+				Helper<PermutationSolution<Double>> helperPSD = new Helper<>();
+				PermutationProblem<PermutationSolution<Double>> problemPSD = (PermutationProblem<PermutationSolution<Double>>) helperPSD.setProblem(this.problem);
+				CrossoverOperator<PermutationSolution<Double>> crossoverOperatorPSD = null;
+				MutationOperator<PermutationSolution<Double>> mutationOperatorPSD = null;
+				if (this.crossoverOperator != null) {
+					crossoverOperatorPSD =  helperPSD.setCrossover(this.crossoverOperator);
+				}
+				if (this.mutationOperator != null) {
+					mutationOperatorPSD =  helperPSD.setMutation(this.mutationOperator,problemPSD);
+				}
+				
+				if (this.selectionOperator != null) {
+					if (singleListSelection.contains(this.selectionOperator.getSelectionName())) {
+						SelectionOperator<List<PermutationSolution<Double>>, PermutationSolution<Double>> selectionOperatorDS =  helperPSD.setSingleListSelection(this.selectionOperator,problemPSD);				
+						
+						switch (this.algorithm.getAlgorithmName()) {
+						case "SteadyStateGeneticAlgorithm":
+							Algorithm<PermutationSolution<Double>> algorithmSA = new SteadyStateGeneticAlgorithmWebFormat<PermutationSolution<Double>>(resultRepository,experiment,problemPSD,
+									Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()),Integer.parseInt(parameter.get("populationSize").getParameterValue()),
+							          crossoverOperatorPSD, mutationOperatorPSD, selectionOperatorDS);
+							
+							new AlgorithmRunner.Executor(algorithmSA).execute() ;
+		
+							result = algorithmSA.getResult().getObjective(0);
+							populationPSD = algorithmSA.getResult().getVariables();
+						    
+							break;
+							
+						case "GenerationalGeneticAlgorithm":				
+							Algorithm<PermutationSolution<Double>> algorithmGA = new GenerationalGeneticAlgorithmWebFormet<PermutationSolution<Double>>(resultRepository,experiment,problemPSD,
+									Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()),Integer.parseInt(parameter.get("populationSize").getParameterValue()),
+							          crossoverOperatorPSD, mutationOperatorPSD, selectionOperatorDS, new SequentialSolutionListEvaluator<PermutationSolution<Double>>());
+											
+							new AlgorithmRunner.Executor(algorithmGA).execute() ;
+		
+						    result = algorithmGA.getResult().getObjective(0);
+						    populationPSD = algorithmGA.getResult().getVariables();
+						    
+							break;
+							
+						case "CoralReefsOptimization":				
+							Algorithm<List<PermutationSolution<Double>>> algorithmCOA = new CoralReefsOptimizationWebPage<PermutationSolution<Double>>(resultRepository, experiment, problemPSD,
+									Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()), new ObjectiveComparator<PermutationSolution<Double>>(0), 
+									selectionOperatorDS, crossoverOperatorPSD, mutationOperatorPSD, Integer.parseInt(parameter.get("n").getParameterValue()), Integer.parseInt(parameter.get("m").getParameterValue()), 
+									Double.parseDouble(parameter.get("rho").getParameterValue()), Double.parseDouble(parameter.get("fbs").getParameterValue()), Double.parseDouble(parameter.get("fa").getParameterValue()),
+									Double.parseDouble(parameter.get("pd").getParameterValue()), Integer.parseInt(parameter.get("attemptsToSettle").getParameterValue()));
+											
+							new AlgorithmRunner.Executor(algorithmCOA).execute() ;
+		
+						    result = algorithmCOA.getResult().get(0).getObjective(0);
+						    populationPSD = algorithmCOA.getResult().get(0).getVariables();
+						    
+							break;
+							
+						
+							
+						}
+					}else if(dobleListSelection.contains(this.selectionOperator.getSelectionName())){
+						SelectionOperator<List<PermutationSolution<Double>>, List<PermutationSolution<Double>>> selectionOperatorDS =  helperPSD.setdobleListSelection(this.selectionOperator,problemPSD);
+						
+					}
+				
+				}else {
+					
+					switch (this.algorithm.getAlgorithmName()) {
+						case "ElitistEvolutionStrategy":				
+							Algorithm<PermutationSolution<Double>> algorithmESA = new ElitistEvolutionStrategyWebPage<PermutationSolution<Double>>(resultRepository, experiment, problemPSD, Integer.parseInt(parameter.get("mu").getParameterValue()),
+									Integer.parseInt(parameter.get("lambda").getParameterValue()),Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()), mutationOperatorPSD);
+											
+							new AlgorithmRunner.Executor(algorithmESA).execute() ;
+			
+						    result = algorithmESA.getResult().getObjective(0);
+						    populationPSD = algorithmESA.getResult().getVariables();
+						    
+							break;
+							
+						case "NonElitistEvolutionStrategy":				
+							Algorithm<PermutationSolution<Double>> algorithmNESA = new NonElitistEvolutionStrategyWebPage<PermutationSolution<Double>>(resultRepository, experiment, problemPSD,Integer.parseInt(parameter.get("mu").getParameterValue()),
+									Integer.parseInt(parameter.get("lambda").getParameterValue()),Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()), mutationOperatorPSD);
+											
+							new AlgorithmRunner.Executor(algorithmNESA).execute() ;
+			
+						    result = algorithmNESA.getResult().getObjective(0);
+						    populationPSD = algorithmNESA.getResult().getVariables();
+						    
+							break;	
+					}		
+				}
+				
+				String finalPopulationPSD = populationPSD.toString();
+			    
+			    FinalResults finalResultPSD = new FinalResults(experiment, result, finalPopulationPSD);
+			    finalResultsRepository.save(finalResultPSD);
+			
+			    experiment.setFinalResult(finalResultPSD);
+			    experimentRepository.save(experiment);
+				break;
+
+			default:
+				break;
+			}
+			
+
 		}
 		
 	}
@@ -644,6 +857,7 @@ public class ExperiementCreateController  {
 	
 	private class Helper<T> {
 		private T t;
+		@SuppressWarnings("unchecked")
 		public Problem<T> setProblem(WebPageProblem problem){
 			Problem<T> problemToReturn = null;
 			switch (problem.getProblemName()) {
@@ -672,15 +886,21 @@ public class ExperiementCreateController  {
 				break;
 
 			case "TSP":
-				try {
-					if (parameter.get("distanceFile").getParameterValue().equals("")) {
-						problemToReturn = (Problem<T>) new TSP("/tspInstances/kroA100.tsp");
-					} else {
-
+				if (parameter.get("distanceFile").getParameterValue().equals("")) {
+					try {
+						problemToReturn = (Problem<T>) new TSPWebPage("/tspInstances/kroA100.tsp");
+						
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-					
-				} catch (IOException e) {
-					e.printStackTrace();
+				} else {
+					try {
+						problemToReturn = (Problem<T>) new TSPWebPage("/TSPFiles/"+parameter.get("distanceFile").getParameterValue());
+					} catch (IOException e) {
+						e.printStackTrace();
+						
+//						showErrorMessage(model,e);
+					}
 				}
 				break;
 
@@ -694,14 +914,15 @@ public class ExperiementCreateController  {
 			return problemToReturn;
 		}
 		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public CrossoverOperator<T> setCrossover(WebPageCrossover crossover){
 			CrossoverOperator<T> crossoverToReturn = null;
 			switch (crossover.getCrossoverName()) {
 			case "SinglePointCrossover":
-				if((parameter.get("crossoverProbability")!= null) && parameter.get("randomGenerator") != null && parameter.get("pointRandomGenerator") != null ) {
+				if((parameter.get("crossoverProbability")!= null) && parameter.get("crossoverRandomGenerator") != null && parameter.get("pointRandomGenerator") != null ) {
 					crossoverToReturn = (CrossoverOperator<T>) new SinglePointCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),
 							() -> JMetalRandom.getInstance().nextDouble(),(a, b) -> JMetalRandom.getInstance().nextInt(a, b));
-				}else if((parameter.get("crossoverProbability")!= null) && parameter.get("randomGenerator") != null ) {
+				}else if((parameter.get("crossoverProbability")!= null) && parameter.get("crossoverRandomGenerator") != null ) {
 					crossoverToReturn = (CrossoverOperator<T>) new SinglePointCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),
 							() -> JMetalRandom.getInstance().nextDouble());
 				}else{
@@ -710,9 +931,9 @@ public class ExperiementCreateController  {
 				
 				break;
 			case"BLXAlphaCrossover":
-				if((parameter.get("crossoverProbability")!= null) && parameter.get("alpha") != null && parameter.get("solutionRepair") != null && parameter.get("randomGenerator") != null ) {
+				if((parameter.get("crossoverProbability")!= null) && parameter.get("alpha") != null && parameter.get("crossoverSolutionRepair") != null && parameter.get("crossoverRandomGenerator") != null ) {
 					crossoverToReturn = (CrossoverOperator<T>) new BLXAlphaCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("alpha").getParameterValue()), new RepairDoubleSolutionAtBounds(), () -> JMetalRandom.getInstance().nextDouble());					
-				}else if((parameter.get("crossoverProbability")!= null) && parameter.get("alpha") != null && parameter.get("solutionRepair") != null ) {
+				}else if((parameter.get("crossoverProbability")!= null) && parameter.get("alpha") != null && parameter.get("crossoverSolutionRepair") != null ) {
 					crossoverToReturn = (CrossoverOperator<T>) new BLXAlphaCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("alpha").getParameterValue()), new RepairDoubleSolutionAtBounds());					
 				}else if((parameter.get("crossoverProbability")!= null) && parameter.get("alpha") != null  ) {
 					crossoverToReturn = (CrossoverOperator<T>) new BLXAlphaCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("alpha").getParameterValue()));
@@ -734,7 +955,7 @@ public class ExperiementCreateController  {
 					} else {
 						crossoverToReturn = (CrossoverOperator<T>) new DifferentialEvolutionCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("f").getParameterValue()), parameter.get("variant").getParameterValue(), (a, b) -> JMetalRandom.getInstance().nextInt(a, b), (a,b) -> JMetalRandom.getInstance().nextDouble(a,b));					
 					}
-				}else if((parameter.get("crossoverProbability")!= null) && parameter.get("f") != null && parameter.get("variant") != null && parameter.get("randomGenerator") != null) {
+				}else if((parameter.get("crossoverProbability")!= null) && parameter.get("f") != null && parameter.get("variant") != null && parameter.get("crossoverRandomGenerator") != null) {
 					if (parameter.get("variant").getParameterValue().equals("")) {
 						crossoverToReturn = (CrossoverOperator<T>) new DifferentialEvolutionCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("f").getParameterValue()), "rand/1/bin", () -> JMetalRandom.getInstance().nextDouble());					
 					} else {
@@ -750,11 +971,11 @@ public class ExperiementCreateController  {
 				break;
 				
 			case"SBXCrossover":
-				if((parameter.get("crossoverProbability")!= null) && parameter.get("distributionIndex") != null && parameter.get("solutionRepair") != null && parameter.get("randomGenerator") != null ) {
+				if((parameter.get("crossoverProbability")!= null) && parameter.get("distributionIndex") != null && parameter.get("crossoverSolutionRepair") != null && parameter.get("crossoverRandomGenerator") != null ) {
 					crossoverToReturn = (CrossoverOperator<T>) new SBXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), new RepairDoubleSolutionAtBounds(), () -> JMetalRandom.getInstance().nextDouble());					
-				}else if(parameter.get("crossoverProbability") != null && parameter.get("distributionIndex") != null && parameter.get("randomGenerator") != null){
+				}else if(parameter.get("crossoverProbability") != null && parameter.get("distributionIndex") != null && parameter.get("crossoverRandomGenerator") != null){
 					crossoverToReturn = (CrossoverOperator<T>) new SBXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), () -> JMetalRandom.getInstance().nextDouble());					
-				}else if(parameter.get("crossoverProbability") != null && parameter.get("distributionIndex") != null && parameter.get("solutionRepair") != null){
+				}else if(parameter.get("crossoverProbability") != null && parameter.get("distributionIndex") != null && parameter.get("crossoverSolutionRepair") != null){
 					crossoverToReturn = (CrossoverOperator<T>) new SBXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("distributionIndex").getParameterValue()),new RepairDoubleSolutionAtBounds());					
 				}else {
 					crossoverToReturn = (CrossoverOperator<T>) new SBXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),Double.parseDouble(parameter.get("distributionIndex").getParameterValue()));					
@@ -762,7 +983,7 @@ public class ExperiementCreateController  {
 				break;
 				
 			case"HUXCrossover":
-				if((parameter.get("crossoverProbability")!= null) && parameter.get("randomGenerator") != null) {
+				if((parameter.get("crossoverProbability")!= null) && parameter.get("crossoverRandomGenerator") != null) {
 					crossoverToReturn = (CrossoverOperator<T>) new HUXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),() -> JMetalRandom.getInstance().nextDouble());					
 				}else{
 					crossoverToReturn = (CrossoverOperator<T>) new HUXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()));					
@@ -778,9 +999,9 @@ public class ExperiementCreateController  {
 				break;
 				
 			case"PMXCrossover":
-				if((parameter.get("crossoverProbability")!= null) && parameter.get("randomGenerator") != null && parameter.get("cuttingPointRandomGenerator") != null) {
+				if((parameter.get("crossoverProbability")!= null) && parameter.get("crossoverRandomGenerator") != null && parameter.get("cuttingPointRandomGenerator") != null) {
 					crossoverToReturn = (CrossoverOperator<T>) new PMXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),() -> JMetalRandom.getInstance().nextDouble(), (a, b) -> JMetalRandom.getInstance().nextInt(a, b));					
-				}else if(parameter.get("crossoverProbability") != null && parameter.get("randomGenerator") != null){
+				}else if(parameter.get("crossoverProbability") != null && parameter.get("crossoverRandomGenerator") != null){
 					crossoverToReturn = (CrossoverOperator<T>) new PMXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()),() -> JMetalRandom.getInstance().nextDouble());					
 				}else {
 					crossoverToReturn = (CrossoverOperator<T>) new PMXCrossover(Double.parseDouble(parameter.get("crossoverProbability").getParameterValue()));					
@@ -807,11 +1028,12 @@ public class ExperiementCreateController  {
 			return crossoverToReturn;
 		}
 		
+		@SuppressWarnings("unchecked")
 		public MutationOperator<T> setMutation(WebPageMutation mutation, Problem<T> mutationProblem){
 			MutationOperator<T> mutationToReturn = null;
 			switch (mutation.getMutationName()) {
 			case "BitFlipMutation":
-				if((parameter.get("mutationProbability")!= null) && parameter.get("randomGenerator") != null) {
+				if((parameter.get("mutationProbability")!= null) && parameter.get("mutationRandomGenerator") != null) {
 					mutationToReturn = (MutationOperator<T>) new BitFlipMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), () -> JMetalRandom.getInstance().nextDouble());
 				}else {
 					mutationToReturn = (MutationOperator<T>) new BitFlipMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue())) ;
@@ -820,9 +1042,9 @@ public class ExperiementCreateController  {
 				break;
 				
 			case"PermutationSwapMutation":
-				if((parameter.get("mutationProbability")!= null) && (parameter.get("randomGenerator") != null) && (parameter.get("positionRandomGenerator") != null)) {
+				if((parameter.get("mutationProbability")!= null) && (parameter.get("mutationRandomGenerator") != null) && (parameter.get("positionRandomGenerator") != null)) {
 					mutationToReturn = (MutationOperator<T>) new PermutationSwapMutation<>(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), () -> JMetalRandom.getInstance().nextDouble(), (a,b) -> JMetalRandom.getInstance().nextInt(a,b));
-				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("randomGenerator") != null)) {
+				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("mutationRandomGenerator") != null)) {
 					mutationToReturn = (MutationOperator<T>) new PermutationSwapMutation<>(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), () -> JMetalRandom.getInstance().nextDouble());
 				}else {
 					mutationToReturn = (MutationOperator<T>) new PermutationSwapMutation<>(Double.parseDouble(parameter.get("mutationProbability").getParameterValue())) ;
@@ -835,7 +1057,7 @@ public class ExperiementCreateController  {
 				break;
 				
 			case"CDGMutation":
-				if((parameter.get("mutationProbability")!= null) && (parameter.get("delta") != null) && (parameter.get("solutionRepair") != null)) {
+				if((parameter.get("mutationProbability")!= null) && (parameter.get("delta") != null) && (parameter.get("mutationSolutionRepair") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new CDGMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("delta").getParameterValue()), new RepairDoubleSolutionAtBounds());
 				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("delta") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new CDGMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("delta").getParameterValue()));
@@ -855,16 +1077,16 @@ public class ExperiementCreateController  {
 				break;
 				
 			case"PolynomialMutation":
-				if((problem.getSolutionType() == "DoubleSolution") && (parameter.get("distributionIndex") != null) && (parameter.get("randomGenerator") != null)) {
+				if((problem.getSolutionType() == "DoubleSolution") && (parameter.get("distributionIndex") != null) && (parameter.get("mutationRandomGenerator") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new PolynomialMutation((DoubleProblem) mutationProblem, Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), () -> JMetalRandom.getInstance().nextDouble());
 				}else if((problem.getSolutionType() == "DoubleSolution") && (parameter.get("distributionIndex") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new PolynomialMutation((DoubleProblem) mutationProblem, Double.parseDouble(parameter.get("distributionIndex").getParameterValue()));
 				}else 
-					if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("solutionRepair") != null) && (parameter.get("randomGenerator") != null)) {
+					if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("mutationSolutionRepair") != null) && (parameter.get("mutationRandomGenerator") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new PolynomialMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), new RepairDoubleSolutionAtBounds(), () -> JMetalRandom.getInstance().nextDouble());
-				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("solutionRepair") != null)) {
+				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("mutationSolutionRepair") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new PolynomialMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), new RepairDoubleSolutionAtBounds());
-				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("randomGenerator") != null)) {
+				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("mutationRandomGenerator") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new PolynomialMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), () -> JMetalRandom.getInstance().nextDouble());
 				}else {
 					mutationToReturn =  (MutationOperator<T>) new PolynomialMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("distributionIndex").getParameterValue()));
@@ -872,7 +1094,7 @@ public class ExperiementCreateController  {
 				break;
 				
 			case"SimpleRandomMutation":
-				if((parameter.get("mutationProbability")!= null) && (parameter.get("randomGenerator") != null)) {
+				if((parameter.get("mutationProbability")!= null) && (parameter.get("mutationRandomGenerator") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new SimpleRandomMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), () -> JMetalRandom.getInstance().nextDouble());
 				}else {
 					mutationToReturn =  (MutationOperator<T>) new SimpleRandomMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()));
@@ -890,9 +1112,9 @@ public class ExperiementCreateController  {
 			case"IntegerPolynomialMutation":
 				if((problem.getSolutionType() == "IntegerSolution") && (parameter.get("distributionIndex") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new IntegerPolynomialMutation( (IntegerProblem) mutationProblem, Double.parseDouble(parameter.get("distributionIndex").getParameterValue()));
-				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("solutionRepair") != null) && (parameter.get("randomGenerator") != null)) {
+				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("mutationSolutionRepair") != null) && (parameter.get("mutationRandomGenerator") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new IntegerPolynomialMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), new RepairDoubleSolutionAtBounds(), () -> JMetalRandom.getInstance().nextDouble());
-				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("solutionRepair") != null) ) {
+				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("mutationSolutionRepair") != null) ) {
 					mutationToReturn =  (MutationOperator<T>) new IntegerPolynomialMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), new RepairDoubleSolutionAtBounds());
 				}else {
 					mutationToReturn =  (MutationOperator<T>) new IntegerPolynomialMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("distributionIndex").getParameterValue()));
@@ -903,6 +1125,7 @@ public class ExperiementCreateController  {
 			return mutationToReturn;
 		}
 		
+		@SuppressWarnings({ "rawtypes", "unchecked" })
 		public SelectionOperator<List<T>, T> setSingleListSelection(WebPageSelection selection, Problem<T> selectionProblem){
 			SelectionOperator<List<T>, T> selectionToReturn = null;
 			switch (selection.getSelectionName()) {
@@ -951,6 +1174,7 @@ public class ExperiementCreateController  {
 			return selectionToReturn;
 		}
 		
+		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public SelectionOperator<List<T>, List<T>> setdobleListSelection(WebPageSelection selection, Problem<T> selectionProblem){
 			SelectionOperator<List<T>, List<T>> selectionToReturn = null;
 			switch (selection.getSelectionName()) {
@@ -1032,6 +1256,10 @@ public class ExperiementCreateController  {
 			return algorithmToReturn;
 		}*/
 		
+	}
+	
+	private String showErrorPage(Model model, IOException e) {
+		return "error";
 	}
 	
 }
