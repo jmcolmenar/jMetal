@@ -51,7 +51,7 @@ public class StandardPSO2007WebPage extends StandardPSO2007{
 	}
 
 	public void rightResult() {
-		Result resultSave = new Result((getResult().getObjective(0)*-1), experiment);
+		Result resultSave = new Result((getResult().getObjective(0)), experiment);
 		resultRepository.save(resultSave);
 	}
 	

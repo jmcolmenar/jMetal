@@ -1,6 +1,8 @@
 package jmetal.apicontroller;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -888,14 +890,17 @@ public class ExperiementCreateController  {
 			case "TSP":
 				if (parameter.get("distanceFile").getParameterValue().equals("")) {
 					try {
-						problemToReturn = (Problem<T>) new TSPWebPage("/tspInstances/kroA100.tsp");
+						
+						problemToReturn = (Problem<T>) new TSP("/tspInstances/kroA100.tsp");
 						
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 				} else {
 					try {
-						problemToReturn = (Problem<T>) new TSPWebPage("/TSPFiles/"+parameter.get("distanceFile").getParameterValue());
+						Path FILES_FOLDER = Paths.get(System. getProperty("user.dir"), "TSPFiles");
+						String path = FILES_FOLDER.toString();
+						problemToReturn = (Problem<T>) new TSPWebPage(path+"/"+parameter.get("distanceFile").getParameterValue());
 					} catch (IOException e) {
 						e.printStackTrace();
 						

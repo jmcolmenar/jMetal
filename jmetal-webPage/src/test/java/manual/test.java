@@ -1,8 +1,16 @@
 package manual;
 
+import java.io.File;
+import java.net.URL;
+import java.nio.file.FileStore;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.validator.internal.util.privilegedactions.GetClassLoader;
+import org.junit.Test;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GeneticAlgorithmBuilder;
 import org.uma.jmetal.operator.CrossoverOperator;
@@ -123,8 +131,13 @@ public class test {
 	    CrossoverOperator<PermutationSolution<Integer>> crossover;
 	    MutationOperator<PermutationSolution<Integer>> mutation;
 	    SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
-
-	    problem = new TSPWebPage("/TSPFiles/test.tsp");
+		String path = "";
+	    
+		Path p = Paths.get(System. getProperty("user.dir"), "TSPFiles");
+		System.out.println(p);
+		path = p.toString();
+		System.out.println(path);
+	    problem = new TSPWebPage(path+"/test.tsp");
 
 	    crossover = new PMXCrossover(0.9) ;
 

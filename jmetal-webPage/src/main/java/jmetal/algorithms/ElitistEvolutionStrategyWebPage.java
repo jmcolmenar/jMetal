@@ -51,7 +51,7 @@ public class ElitistEvolutionStrategyWebPage<S extends Solution<?>>  extends Eli
 	}
 
 	public void rightResult() {
-		Result resultSave = new Result((getResult().getObjective(0)*-1), experiment);
+		Result resultSave = new Result((getResult().getObjective(0)), experiment);
 		resultRepository.save(resultSave);
 	}
 }

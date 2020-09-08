@@ -1,6 +1,7 @@
 package jmetal.problems;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -55,9 +56,7 @@ public class TSPWebPage extends AbstractIntegerPermutationProblem {
 	  private double [][] readProblem(String file) throws IOException {
 	    double [][] matrix = null;
 
-	    InputStream in = getClass().getResourceAsStream(file);
-	    InputStreamReader isr = new InputStreamReader(in);
-	    BufferedReader br = new BufferedReader(isr);
+	    BufferedReader br = new BufferedReader(new FileReader(file));
 
 	    StreamTokenizer token = new StreamTokenizer(br);
 	    try {
