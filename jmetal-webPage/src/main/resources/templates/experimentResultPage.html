@@ -6,38 +6,48 @@
 	<link rel="stylesheet" href="css/bootstrapCSS.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  	<script src="js/highcharts.js"></script>
-	<script src="js/jquery.min.js"></script>
-	<script src="js/charts.js"></script>
+   	<script src="js/highcharts.js"></script> 
+ 	<script src="js/jquery.min.js"></script> 
+ 	<script src="js/charts.js"></script> 
 	
 </head>
 <body id="">
 	
 	{{>header}}
 	<ul class="list-group list-group-horizontal">
+	  <li class="list-group-item">Experiment name:	"{{experimentName}}"</li>
+	  <li  class="list-group-item">Repetitions:	"{{numberOfRepetition}}"</li>
 	  <li class="list-group-item">Algorithm selected:	"{{selectedAlgorithm}}"</li>
 	  <li  class="list-group-item">Problem selected:	"{{selectedProblem}}"</li>
 	</ul>
-	<br>
-	<ul class="list-group list-group-horizontal">
+	<ul style="margin-top: 7px;" class="list-group list-group-horizontal">
 	  <li class="list-group-item">Selected crossover operator:	"{{selectedCrossover}}"</li>
-	  <li class="list-group-item">Crossover value:	"{{selectedCrossoverValue}}"</li>
 	  <li class="list-group-item">Selected mutation operator:		"{{selectedMutation}}"</li>
 	  <li class="list-group-item">Selected selection operator:	"{{selectedSelectionOperator}}"</li>
 	</ul>
-	<br>
-	<ul class="list-group list-group-horizontal">
-		<li class="list-group-item">Selected max population:	"{{selectedMaxPopulation}}"</li>
-		<li class="list-group-item">Selected max evaluations:		"{{selectedMaxEvaluations}}"</li>
-		<li class="list-group-item">Selected number of bits:	"{{selectedNumberOfBits}}"</li>
+	<ul style="margin-top: 7px;" class="list-group list-group-horizontal">
+		{{#parameters}}
+			<li class="list-group-item">Parameter:	"{{.}}"</li>
+		{{/parameters}}
 	</ul>
+	<div class="col-md-12" style="margin-top: 7px;" id="showResult"> 
+		<ul class="list-group list-group-horizontal">
+			<li class="list-group-item">The final result:</li>
+			<li id="finalResultLi" class="list-group-item"><p id="finalResult"></p>	</li>
+			<li class="list-group-item">The final population:</li>
+		</ul>
+		<ul style="margin-top: 5px;" class="list-group list-group-vertical" id="finalPopulation">
+		</ul>
+		
+	</div>
 	<div class="col text-center">
-		<button style="margin-top: 2px; margin-right: auto; margin-left: auto;" id="showAllResult" class="btn btn-outline-secondary" onclick="drawFullChart();">Show All Results</button>
+		<button style="margin-top: 5px; margin-right: auto; margin-left: auto;" id="showAllResult" class="btn btn-outline-secondary" onclick="drawFullChart();">Show All Results Grafics</button>
 	</div>
 	
 	<div class="col-md-12 wow fadeInUp">
+		<div class="interactions-col" id="allResultsGrafics" style="padding-top: 5px; padding-bottom: 10px;padding-right:20px; position: relative; width: 100%;">
+		</div>
 		<div class="interactions-col">
-			<div style="padding-top: 5px; padding-bottom: 10px;padding-right:20px; position: relative; width: 100%;" id="allResultsGrafics"></div>
 			<div style="padding-top: 5px; padding-bottom: 10px;padding-right:20px; position: relative; width: 100%;" id="resultsGrafics"></div>
 			
 		</div>

@@ -1,6 +1,7 @@
 $.ajax({
 	url : 'chartdata',
 	success : function(result) {
+		
 		category = JSON.parse(result).categories;
 		serie = JSON.parse(result).series;
 		saveCheck = serie[0];
@@ -12,6 +13,7 @@ var updateInterval = 1500;
 var category = [];
 var serie = [];
 var saveCheck;
+var numberOfRepetition = 0;
 
 function drawLiveLineChart(category, series) {
 	chart = Highcharts.chart('resultsGrafics', {
@@ -79,9 +81,7 @@ var update = setInterval(function() {
 function updateChart(count) {
 	$.get("/chartdata", function(result) {
 		var end = (JSON.parse(result).finish);
-		if (end == true) {
-			clearInterval(update);
-		}
+		
 		var cat = (JSON.parse(result).categories);
 		var se = (JSON.parse(result).series);
 		var newCat = category.concat(cat);
@@ -91,6 +91,15 @@ function updateChart(count) {
 			serie = newSe;
 			saveCheck = se.find(checkToSave);
 		} 
+		if ((end[end.length-1] == true) && (end.length-1 == numberOfRepetition))  {
+			clearInterval(update);
+			showFinalResult(end.length);
+		}else if(end[numberOfRepetition] == true){
+			numberOfRepetition++;
+			category = [];
+			serie = [];
+			showFinalResult(numberOfRepetition);
+		}
 		drawLiveLineChart(newCat, newSe);
 		
 	});
@@ -100,19 +109,51 @@ function checkToSave(num) {
 	  return num != saveCheck;
 	}
 
-function drawFullChart() {
-	$.get("/showAllResultChart", function(result) {
+function showFinalResult(id) {
+	$.get("/getFinalResult/"+id, function(result) {
+		var name = (JSON.parse(result).name);
+		var finalResult = (JSON.parse(result).finalResult);
+		var finalPopulation = (JSON.parse(result).finalPopulation);
+		var resultLI = document.createElement("finalResult");
+		var resultText = document.createTextNode(name+"-> {"+finalResult+"}.    ");
+		resultLI.appendChild(resultText);
+		document.getElementById("finalResult").appendChild(resultLI);
 		
+		
+		var ul = document.getElementById("finalPopulation");
+		var populationLI = document.createElement("LI");
+	    var populationText = document.createTextNode(name+"-> "+finalPopulation);
+	    populationLI.appendChild(populationText);
+	    populationLI.setAttribute("border", "1px solid");
+	    ul.appendChild(populationLI);
+	});
+	
+	
+}
+
+function drawFullChart() {
+	
+	$.get("/showAllResultChart", function(result) {
 		var cat = (JSON.parse(result).categories);
 		var se = (JSON.parse(result).series);
-		
-		drawChart(cat, se);
-		
+		var names = (JSON.parse(result).names);
+		var x;
+		for(x in cat){
+			var div = document.createElement("DIV");
+			var newDiv = "allResultsGrafics"+x;
+			div.setAttribute("id", newDiv);
+			div.setAttribute("text", names[x]);
+			document.getElementById("allResultsGrafics").appendChild(div);
+			var newCat = cat[x];
+			var newSe = se[x];
+			
+			drawChart(newCat, newSe,names[x],newDiv);
+		}
 	});
 }
 
-function drawChart(category, series) {
-	chart = Highcharts.chart('allResultsGrafics', {
+function drawChart(category, series,name,div) {
+	chart = Highcharts.chart(div, {
 		chart : {
 			type : 'spline',
 			marginRight : 10,
@@ -130,7 +171,7 @@ function drawChart(category, series) {
 		},
 
 		title : {
-			text : 'All result grafic'
+			text : name
 		},
 
 		xAxis : {

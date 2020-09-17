@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>JMetal</title>
+	<link rel="stylesheet" href="css/bootstrapCSS.css">
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+	<script type="text/javascript" src="js/TSPControllers.js"></script>
+</head>
+<body>
+
+	{{>header}}
+	
+	<div class="container" id="experimemtHtml">
+		<h1>Add your TSP Files</h1>
+		<div class="row">
+			<div class="col-md-12">
+				<div class="row">
+					<div class="col-md-8" style="margin-top: 10px; text-align: center;">
+						<ul id="ul" class="list-group">
+							<li class="list-group-item"><h3>Actual TSPs:</h3></li>
+						</ul>
+					</div>
+					<div class="col-md-4" style="margin-top: 10px; text-align: center;">
+						<form id="tspFile" method="post" enctype="multipart/form-data"
+							role="form" action="/uploadTSPFile" style="display: block;">
+							<input id="TSP" type="file" name="TSP" accept=".tsp"></input>
+							<div class="form-group pt-3">
+								<input id="acceptBtn" type="submit"
+									class="btn btn-outline-secondary mx-auto" value="Aceptar">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

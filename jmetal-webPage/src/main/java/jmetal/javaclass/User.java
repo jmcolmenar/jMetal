@@ -3,6 +3,7 @@ package jmetal.javaclass;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,9 +35,9 @@ public class User {
 	@JsonView({BasicInformation.class, ActiveInformation.class})
 	private boolean activatedUser;
 	
-	@OneToMany
+	@OneToMany(cascade = CascadeType.REMOVE)
 	@JsonView(BasicInformation.class)
-	private List<Experiment> experiments = new LinkedList<>();
+	private List<WebPageExperiment> experiments = new LinkedList<>();
 	
 	
 	public User() {
