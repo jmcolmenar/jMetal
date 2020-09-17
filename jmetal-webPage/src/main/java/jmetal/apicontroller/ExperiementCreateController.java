@@ -888,11 +888,9 @@ public class ExperiementCreateController  {
 				break;
 
 			case "TSP":
-				if (parameter.get("distanceFile").getParameterValue().equals("")) {
+				if (parameter.get("distanceFile").getParameterValue().equals("none")) {
 					try {
-						
 						problemToReturn = (Problem<T>) new TSP("/tspInstances/kroA100.tsp");
-						
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
