@@ -92,9 +92,10 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par11);
 			parameterLists.add(par12);
 
+			String description = "The Coral Reefs Optimization (CRO) algorithm is a novel global-search method based on corals' biology and coral reefs formation. The algorithm is based on a reef of solutions to a given optimization problem (corals), that reproduce in a similar way as corals do in Nature (Broadcast spawning, brooding and budding operators are implemented). In addition, the larvae (new individuals) fight for space in the reef against other existing corals, and even weak solutions have the possibility of surviving, if there is enough room in the reef.";
 			// --------------------------------------CoralReefsOptimization--------------------------------------
-
-			WebPageAlgorithm ag1 = new WebPageAlgorithm("CoralReefsOptimization", "GENERIC", 12, parameterLists);
+			
+			WebPageAlgorithm ag1 = new WebPageAlgorithm("CoralReefsOptimization", "GENERIC", 12, parameterLists, description);
 			algorithmRepository.save(ag1);
 
 			// --------------------------------------ElitistEvolutionStrategy--------------------------------------
@@ -112,7 +113,8 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par15);
 			parameterLists.add(par16);
 			parameterLists.add(par17);
-			WebPageAlgorithm ag2 = new WebPageAlgorithm("ElitistEvolutionStrategy", "GENERIC", 5, parameterLists);
+			description = "Evolutionary algorithms have been applied successfully in many fields. However, evolutionary algorithms cannot find an optimal solution on many occasions because the balance between exploration and exploitation is lost in runs. A practical variant of the general process of building a new population is to allow the best organisms from the current generation to move on to the next, undisturbed. This strategy is known as elitist selection and ensures that the quality of the solution obtained by the GA will not diminish from one generation to the next.";
+			WebPageAlgorithm ag2 = new WebPageAlgorithm("ElitistEvolutionStrategy", "GENERIC", 5, parameterLists, description);
 			algorithmRepository.save(ag2);
 
 			// --------------------------------------NonElitistEvolutionStrategy--------------------------------------
@@ -130,7 +132,8 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par20);
 			parameterLists.add(par21);
 			parameterLists.add(par22);
-			WebPageAlgorithm ag3 = new WebPageAlgorithm("NonElitistEvolutionStrategy", "GENERIC", 5, parameterLists);
+			description = "Evolutionary strategies are a type of evolutionary algorithms that are mainly characterized by: The selection of individuals for recombination is impartial and is a deterministic process, they differ from the rest of the Evolutionary Algorithms mainly by the form of the mutation operator and are mainly applied in continuous optimization problems where the representation is through vectors of real numbers. Evolutionary algorithms have been applied successfully in many fields. the strategy known as elitist selection that ensures that the quality of the solution obtained by the GA will not decrease from one generation to the next is not used in NonElitistEvolutionStrategy.";
+			WebPageAlgorithm ag3 = new WebPageAlgorithm("NonElitistEvolutionStrategy", "GENERIC", 5, parameterLists, description);
 			algorithmRepository.save(ag3);
 
 			// --------------------------------------GenerationalGeneticAlgorithm--------------------------------------
@@ -151,7 +154,8 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par26);
 			parameterLists.add(par27);
 			parameterLists.add(par28);
-			WebPageAlgorithm ag4 = new WebPageAlgorithm("GenerationalGeneticAlgorithm", "GENERIC", 6, parameterLists);
+			description = "Genetic algorithms simulate the process of natural selection which means those species who can adapt to changes in their environment are able to survive and reproduce and go to next generation. In a generational GA the entire population gets replaced each generation (through the processes of selection and reproduction). There a temporal or intermediate population is used. Within the generation t, it is initializated with a fixed number of individuals from the previous population (elitism) and the offspring is insert there until the maximum size is reached. At that point this temporal population should the new population (at generation t+1), a new temporary populatiion is created and the process starts once again.";
+			WebPageAlgorithm ag4 = new WebPageAlgorithm("GenerationalGeneticAlgorithm", "GENERIC", 6, parameterLists, description);
 			algorithmRepository.save(ag4);
 
 			// --------------------------------------SteadyStateGeneticAlgorithm--------------------------------------
@@ -172,7 +176,8 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par32);
 			parameterLists.add(par33);
 			parameterLists.add(par34);
-			WebPageAlgorithm ag5 = new WebPageAlgorithm("SteadyStateGeneticAlgorithm", "GENERIC", 6, parameterLists);
+			description = "Genetic algorithms simulate the process of natural selection which means those species who can adapt to changes in their environment are able to survive and reproduce and go to next generation. The steady state GA, in it two parents are selected and crossed obtaining two offspring that are mutated and inserted in the population. There is only one population where the offspring is inserted.";
+			WebPageAlgorithm ag5 = new WebPageAlgorithm("SteadyStateGeneticAlgorithm", "GENERIC", 6, parameterLists, description);
 			algorithmRepository.save(ag5);
 
 			// --------------------------------------DifferentialEvolution--------------------------------------
@@ -190,7 +195,8 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par36);
 			parameterLists.add(par37);
 			parameterLists.add(par38);
-			WebPageAlgorithm ag6 = new WebPageAlgorithm("DifferentialEvolution", "DoubleSolution", 5, parameterLists);
+			description = "Differential evolution algorithm is a novel evolutionary algorithm on the basis of genetic algorithms. Its main idea is to generate a temporary individual based on individual differences within populations and then randomly restructure population evolutionary. The algorithm has better global convergence and robustness, very suitable for solving a variety of numerical optimization problems.";
+			WebPageAlgorithm ag6 = new WebPageAlgorithm("DifferentialEvolution", "DoubleSolution", 5, parameterLists, description);
 			algorithmRepository.save(ag6);
 
 			// --------------------------------------CovarianceMatrixAdaptationEvolutionStrategy--------------------------------------
@@ -205,8 +211,9 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par45);
 			parameterLists.add(par46);
 			parameterLists.add(par47);
+			description = "CMA-ES belongs to Evolution Strategy, its a derivative-free method which is a practical optimization tool for continuous optimization problems. It optimizes a black-box objective function over a well-defined parameter space in which feature functions are often defined manually. Therefore, the performance of those techniques strongly depends on the quality of the chosen features or the underlying parametric function space.";
 			WebPageAlgorithm ag7 = new WebPageAlgorithm("CovarianceMatrixAdaptationEvolutionStrategy", "DoubleSolution",
-					0, parameterLists);
+					0, parameterLists, description);
 			algorithmRepository.save(ag7);
 
 			// --------------------------------------StandardPSO2007--------------------------------------
@@ -221,7 +228,8 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par39);
 			parameterLists.add(par40);
 			parameterLists.add(par41);
-			WebPageAlgorithm ag8 = new WebPageAlgorithm("StandardPSO2007", "DoubleSolution", 4, parameterLists);
+			description = "PSO is a computational method that optimizes a problem by iteratively trying to improve a candidate solution with regard to a given measure of quality. A basic variant of the PSO algorithm works by having a population (called a swarm) of candidate solutions (called particles). These particles are moved around in the search-space according to a few simple formulae. The movements of the particles are guided by their own best known position in the search-space as well as the entire swarm's best known position. When improved positions are being discovered these will then come to guide the movements of the swarm. The process is repeated and by doing so it is hoped, but not guaranteed, that a satisfactory solution will eventually be discovered. SPSO2007 automatically calculates by a formula depending on the dimension of the search space.";
+			WebPageAlgorithm ag8 = new WebPageAlgorithm("StandardPSO2007", "DoubleSolution", 4, parameterLists, description);
 			algorithmRepository.save(ag8);
 
 			// --------------------------------------StandardPSO2011--------------------------------------
@@ -236,7 +244,8 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par42);
 			parameterLists.add(par43);
 			parameterLists.add(par44);
-			WebPageAlgorithm ag9 = new WebPageAlgorithm("StandardPSO2011", "DoubleSolution", 4, parameterLists);
+			description = "PSO is a computational method that optimizes a problem by iteratively trying to improve a candidate solution with regard to a given measure of quality. A basic variant of the PSO algorithm works by having a population (called a swarm) of candidate solutions (called particles). These particles are moved around in the search-space according to a few simple formulae. The movements of the particles are guided by their own best known position in the search-space as well as the entire swarm's best known position. When improved positions are being discovered these will then come to guide the movements of the swarm. The process is repeated and by doing so it is hoped, but not guaranteed, that a satisfactory solution will eventually be discovered. SPSO2011 is a major improvement with its adaptive random topology and rotational invariance.";
+			WebPageAlgorithm ag9 = new WebPageAlgorithm("StandardPSO2011", "DoubleSolution", 4, parameterLists, description);
 			algorithmRepository.save(ag9);
 		}
 	}
@@ -1052,15 +1061,15 @@ public class DatabaseInformationLoader {
 		if (problemRepository.count() == 0) {
 
 			List<Parameter> parameterLists = new LinkedList<Parameter>();
-
 			// ----------------------------------------Griewank-----------------------------------
 			parameterLists.clear();
 			Parameter par3 = new Parameter("int", "numberOfVariables");
 			parameterRepository.save(par3);
 
 			parameterLists.add(par3);
+			String description ="The Griewank function is a function widely used to test the convergence of optimization functions. The Griewank function has many widespread local minima, which are regularly distributed. The function is continuous,  not convex,  unimodal and can be defined on n-dimensional space. This makes it difficult to obtain the minimum.";
 			WebPageProblem pro2 = new WebPageProblem("org.uma.jmetal.problem.singleobjective.Griewank",
-					"DoubleSolution", 1, true, parameterLists);
+					"DoubleSolution", 1, true, description, parameterLists);
 			problemRepository.save(pro2);
 
 			// ----------------------------------------Rastrigin-----------------------------------
@@ -1069,9 +1078,9 @@ public class DatabaseInformationLoader {
 			parameterRepository.save(par4);
 
 			parameterLists.add(par4);
-
+			description = "The Rastrigin function is a non-convex function used as a performance test problem for optimization algorithms. It is a typical example of non-linear multimodal function. It was first proposed in 1974 as a 2-dimensional function and has been generalized. Finding the minimum of this function is a fairly difficult problem due to its large search space and its large number of local minima.";
 			WebPageProblem pro3 = new WebPageProblem("org.uma.jmetal.problem.singleobjective.Rastrigin",
-					"DoubleSolution", 1, true, parameterLists);
+					"DoubleSolution", 1, true, description, parameterLists);
 			problemRepository.save(pro3);
 
 			// ----------------------------------------Rosenbrock-----------------------------------
@@ -1080,9 +1089,9 @@ public class DatabaseInformationLoader {
 			parameterRepository.save(par5);
 
 			parameterLists.add(par5);
-
+			description = "The Rosenbrock function is a non-convex function, which is used as a performance test problem for optimization algorithms. It is also known as Rosenbrock's valley or Rosenbrock's banana function. The global minimum is inside a long, narrow, parabolic shaped flat valley. To find the valley is trivial. To converge to the global minimum, however, is difficult.";
 			WebPageProblem pro4 = new WebPageProblem("org.uma.jmetal.problem.singleobjective.Rosenbrock",
-					"DoubleSolution", 1, true, parameterLists);
+					"DoubleSolution", 1, true, description, parameterLists);
 			problemRepository.save(pro4);
 
 			// ----------------------------------------Sphere-----------------------------------
@@ -1091,8 +1100,9 @@ public class DatabaseInformationLoader {
 			parameterRepository.save(par6);
 
 			parameterLists.add(par6);
+			description = "The Sphere function has dimensions local minima except for the global one. It is continuous, convex and unimodal. The problem consist in computing the center of a minimal bounding sphere.";
 			WebPageProblem pro5 = new WebPageProblem("org.uma.jmetal.problem.singleobjective.Sphere", "DoubleSolution",
-					1, true, parameterLists);
+					1, true, description, parameterLists);
 			problemRepository.save(pro5);
 
 			// ----------------------------------------TSP-----------------------------------
@@ -1101,9 +1111,9 @@ public class DatabaseInformationLoader {
 
 			parameterLists.clear();
 			parameterLists.add(par7);
-
+			description = "The travelling salesman problem (TSP) asks the following question: Given a list of cities and the distances between each pair of cities, what is the shortest possible route that visits each city exactly once and returns to the origin city? It is an NP-hard problem in combinatorial optimization, important in theoretical computer science and operations research.";
 			WebPageProblem pro6 = new WebPageProblem("org.uma.jmetal.problem.singleobjective.TSP",
-					"PermutationSolution-Integer", 1, true, parameterLists);
+					"PermutationSolution-Integer", 1, true, description, parameterLists);
 			problemRepository.save(pro6);
 
 			// ----------------------------------------NIntegerMin-----------------------------------
@@ -1121,9 +1131,9 @@ public class DatabaseInformationLoader {
 			parameterLists.add(par9);
 			parameterLists.add(par10);
 			parameterLists.add(par11);
-
+			description = "Single objective problem for testing integer encoding. Objective: minimizing the distance to value N.";
 			WebPageProblem pro7 = new WebPageProblem("org.uma.jmetal.problem.singleobjective.NIntegerMin",
-					"IntegerSolution", 1, true, parameterLists);
+					"IntegerSolution", 1, true, description, parameterLists);
 			problemRepository.save(pro7);
 
 			// ----------------------------------------OneMax-----------------------------------
@@ -1132,9 +1142,9 @@ public class DatabaseInformationLoader {
 
 			parameterLists.clear();
 			parameterLists.add(par12);
-
+			description = "The problem consist of maximizing the number of '1's in a binary string.";
 			WebPageProblem pro8 = new WebPageProblem("org.uma.jmetal.problem.singleobjective.OneMax", "BinarySolution",
-					1, true, parameterLists);
+					1, true, description, parameterLists);
 			problemRepository.save(pro8);
 		}
 	}

@@ -56,7 +56,8 @@ public class GenerationalGeneticAlgorithmWebFormet<S extends Solution<?>> extend
 	  }
 	
 	public void rightResult() {
-		Result resultSave = new Result((getResult().getObjective(0)*-1), experiment);
+		double roundedResult = Math.round((getResult().getObjective(0)) * 100.0) / 100.0;
+		Result resultSave = new Result(roundedResult*-1, experiment);
 		resultRepository.save(resultSave);
 	}
 }

@@ -3,6 +3,7 @@ $.ajax({
 	success : function(result) {
 		hideAll();
 		$("#TSPsSelection").hide();
+		$("#problemDescription").hide();
 		getProblems();
 	}
 });
@@ -13,6 +14,7 @@ function hideAll(){
 	$("#crossoverOperator").hide();
 	$("#mutationOperator").hide();
 	$("#selectionOperator").hide();
+	$("#algorithmDescription").hide();
 	
 }
 
@@ -36,6 +38,10 @@ function getAlgorithms() {
 		
 		var algorithms = (JSON.parse(result).algorithmsName);
 		var problemParams = (JSON.parse(result).problemParams);
+		var problemDescription = (JSON.parse(result).problemDescription);
+		$("#problemDescription").show();
+		var text = document.getElementById('problemDescription');
+		text.innerHTML = problemDescription;
 		
 		var algorithmView = document.getElementById('algorithms');
 		algorithmView = true;
@@ -58,10 +64,14 @@ function getAlgorithms() {
 function setAlgorithmParams() {
 	hideAll();
 	$("#algorithms").show();
+	
 	var algorithm = document.getElementById('selectAlgorithm').value;
 	$.get("/getAlgorithmParams/"+algorithm, function(result) {
 		var algorithmParams = (JSON.parse(result).algorithmParams);
-		
+		var algorithmDescription = (JSON.parse(result).algorithmDescription);
+		$("#algorithmDescription").show();
+		var text = document.getElementById('algorithmDescription');
+		text.innerHTML = algorithmDescription;
 		var typeParam = "algorithmParams";
 		setParams(algorithmParams,typeParam);
 	});

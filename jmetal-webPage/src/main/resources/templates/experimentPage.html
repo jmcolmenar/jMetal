@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>JMetal</title>
+<title>jMetal</title>
 	<link rel="stylesheet" href="css/bootstrapCSS.css">
 	<link rel="stylesheet" href="css/experimentPage.css">
 	<script type="text/javascript" src="js/jquery.min.js"></script>
@@ -34,6 +34,7 @@
 						<label for="selectproblem">Select problem:</label>
 						<select id="selectProblem" name="problem" class="custom-select" onchange="getAlgorithms()" required>
 						</select>
+						<p id="problemDescription"></p>
 					</div>
 				</div>
 				<div class="col-md-3">
@@ -49,8 +50,7 @@
 						</div>
 					</div>
 		        </div>
-		      </div>
-				
+		       </div>
 				<div class="row" id ="algorithms">
 					<div class="col-md-9">
 						<div class="form-group">
@@ -58,10 +58,10 @@
 							<select id="selectAlgorithm" name="algorithm" class="custom-select" onchange="setAlgorithmParams()" required>
 								<option selected>Select algorithm</option>
 							</select>
+							<p id="algorithmDescription"></p>
 						</div>
 					</div>
 				</div>
-				
 			
 				<div class="row" id="crossoverOperator">
 					<div class="col-md-9">

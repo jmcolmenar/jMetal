@@ -1,26 +1,11 @@
 package jmetal;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import jmetal.apicontroller.ExperiementCreateController;
 import jmetal.javaclass.FinalResults;
@@ -82,7 +65,6 @@ public class MainPageController {
 	private static volatile Boolean pushed;
 	private Boolean[] finished;
 	private int count;
-	private String TSPfile;
 
 	@RequestMapping("/")
 	public String mainPage(Model model) {
@@ -117,8 +99,9 @@ public class MainPageController {
 	}
 
 	@RequestMapping(value = "/experimentResultPage")
-	public void experimentResultPage(Model model, @RequestBody LinkedMultiValueMap<String, String> values) throws ServletException, InterruptedException {
-		List<String> parameters = new ArrayList<>();
+	public void experimentResultPage(Model model, @RequestBody LinkedMultiValueMap<String, String> values)
+			throws ServletException, InterruptedException {
+		List<String> problemParameters = new ArrayList<>();
 
 		// ----------------------- set problem of the experiemnt------------------------------
 		List<String> problemValue = values.get("problem");
@@ -132,7 +115,7 @@ public class MainPageController {
 					values.get(problemParams.get(i).getParameterName()).get(0));
 			parameterRepository.save(par);
 			problemParameterWithValue.add(par);
-			parameters.add(par.getParameterName() + "->" + par.getParameterValue());
+			problemParameters.add(par.getParameterName() + "->" + par.getParameterValue());
 		}
 		final WebPageProblem experimentProblem = new WebPageProblem();
 		experimentProblem.setProblemName(problemsSplited[1]);
@@ -151,6 +134,10 @@ public class MainPageController {
 		WebPageMutation experimentMutation = null;
 		WebPageCrossover experimentCrossover = null;
 		WebPageSelection experimentSelection = null;
+		List<String> algorithmParameters = new ArrayList<>();
+		List<String> crossoverParameters = new ArrayList<>();
+		List<String> mutationParameters = new ArrayList<>();
+		List<String> selectionParameters = new ArrayList<>();
 		if (algorithmValue == null) {
 			System.err.println();
 			;
@@ -174,7 +161,7 @@ public class MainPageController {
 								values.get(mutationParams.get(j).getParameterName()).get(0));
 						parameterRepository.save(par);
 						mutationParameterWithValue.add(par);
-						parameters.add(par.getParameterName() + "->" + par.getParameterValue());
+						mutationParameters.add(par.getParameterName() + "->" + par.getParameterValue());
 					}
 
 					experimentMutation = new WebPageMutation();
@@ -200,7 +187,7 @@ public class MainPageController {
 								values.get(crossoverParams.get(j).getParameterName()).get(0));
 						parameterRepository.save(par);
 						crossoverParameterWithValue.add(par);
-						parameters.add(par.getParameterName() + "->" + par.getParameterValue());
+						crossoverParameters.add(par.getParameterName() + "->" + par.getParameterValue());
 					}
 
 					experimentCrossover = new WebPageCrossover();
@@ -226,7 +213,7 @@ public class MainPageController {
 								values.get(selectionParams.get(j).getParameterName()).get(0));
 						parameterRepository.save(par);
 						selectionParameterWithValue.add(par);
-						parameters.add(par.getParameterName() + "->" + par.getParameterValue());
+						selectionParameters.add(par.getParameterName() + "->" + par.getParameterValue());
 					}
 
 					experimentSelection = new WebPageSelection();
@@ -246,7 +233,7 @@ public class MainPageController {
 							values.get(algorithmParams.get(i).getParameterName()).get(0));
 					parameterRepository.save(par);
 					algorithmParameterWithValue.add(par);
-					parameters.add(par.getParameterName() + "->" + par.getParameterValue());
+					algorithmParameters.add(par.getParameterName() + "->" + par.getParameterValue());
 					break;
 				}
 			}
@@ -260,24 +247,31 @@ public class MainPageController {
 
 		}
 
-		model.addAttribute("selectedAlgorithm", experimentAlgorithm.getAlgorithmName());
 		model.addAttribute("selectedProblem", experimentProblem.getProblemName());
+		model.addAttribute("problemParameters", problemParameters);
+		model.addAttribute("selectedAlgorithm", experimentAlgorithm.getAlgorithmName());
+		model.addAttribute("algorithmParameters", algorithmParameters);
 		if (experimentCrossover != null) {
 			model.addAttribute("selectedCrossover", experimentCrossover.getCrossoverName());
+			model.addAttribute("crossoverParameters", crossoverParameters);
 		} else {
 			model.addAttribute("selectedCrossover", "");
+			model.addAttribute("crossoverParameters", "");
 		}
 		if (experimentMutation != null) {
 			model.addAttribute("selectedMutation", experimentMutation.getMutationName());
+			model.addAttribute("mutationParameters", mutationParameters);
 		} else {
 			model.addAttribute("selectedMutation", "");
+			model.addAttribute("mutationParameters", "");
 		}
 		if (experimentSelection != null) {
 			model.addAttribute("selectedSelectionOperator", experimentSelection.getSelectionName());
+			model.addAttribute("selectionParameters", selectionParameters);
 		} else {
 			model.addAttribute("selectedSelectionOperator", "");
+			model.addAttribute("selectionParameters", "");
 		}
-		model.addAttribute("parameters", parameters);
 
 		count = 0;
 		pushed = false;
@@ -340,9 +334,6 @@ public class MainPageController {
 			if (!finishedTh[0]) {
 				processShowResultPage();
 			}
-			// else {
-			//
-			// }
 			pushed = true;
 			while (pushed) {
 			}
@@ -439,11 +430,9 @@ public class MainPageController {
 		return jsonObject.toString();
 	}
 
-	
-
-	@RequestMapping("/playExperiment/{id}")
-	public void playExperiment(Model model, @PathVariable String id) throws InterruptedException {
-		List<WebPageExperiment> experimentList = experimentRepository.getAllExperimentById(id);
+	@RequestMapping(value="/showExperiment",params="runAgain",method=RequestMethod.POST)
+	public void rerunExperiment(Model model, @RequestBody LinkedMultiValueMap<String, String> value){
+		List<WebPageExperiment> experimentList = experimentRepository.getAllExperimentById(value.getFirst("experimentList"));
 		WebPageProblem problem;
 		WebPageAlgorithm algorithm;
 		WebPageCrossover crossover;
@@ -456,41 +445,92 @@ public class MainPageController {
 		selection = experimentList.get(0).getSelectionOperator();
 		mutation = experimentList.get(0).getMutation();
 
-		LinkedMultiValueMap<String, String> mapToPass = new LinkedMultiValueMap<>();
+		List<String> problemParameters = new ArrayList<>();
+		List<String> algorithmParameters = new ArrayList<>();
+		List<String> crossoverParameters = new ArrayList<>();
+		List<String> mutationParameters = new ArrayList<>();
+		List<String> selectionParameters = new ArrayList<>();
+		problemParameters.addAll(setParameterList(parameterRepository.findParametersByProblemId(problem.getId())));
+		algorithmParameters.addAll(setParameterList(parameterRepository.findParametersByAlgorithmId(algorithm.getId())));
 
-		mapToPass.put("experimentName", Arrays.asList(id));
-		mapToPass.put("numberOfRepetition",
-				Arrays.asList(String.valueOf(experimentList.get(0).getNumberOfRepetition())));
-		mapToPass.put("problem", Arrays.asList(problem.toString()));
-		mapToPass.putAll(setParameterMap(parameterRepository.findParametersByProblemId(problem.getId())));
+		String id = value.get("experimentList").get(0) + "0-";
+		do {
+			List<String> idCount = null;
+			idCount = experimentRepository.getExperimentId(id);
+			if (idCount.size() == 0) {
+				id = value.get("experimentList").get(0) + "0-";
+			} else {
+				String[] s = idCount.get(0).split("-");
+				id = value.get("experimentList").get(0)
+						+ (Character.getNumericValue(s[0].charAt(s[0].length() - 1)) + 1) + "-";
+			}
 
-		mapToPass.put("algorithm", Arrays.asList(algorithm.toString()));
-		mapToPass.putAll(setParameterMap(parameterRepository.findParametersByAlgorithmId(algorithm.getId())));
-
+		} while (experimentRepository.countExperimentsById(id) != 0);
+		
+		model.addAttribute("experimentName", id);
+		model.addAttribute("numberOfRepetition", experimentList.get(0).getNumberOfRepetition());
+		model.addAttribute("selectedAlgorithm", algorithm.getAlgorithmName());
+		model.addAttribute("selectedProblem", problem.getProblemName());
+		model.addAttribute("problemParameters", problemParameters);
 		if (crossover != null) {
-			mapToPass.put("crossover", Arrays.asList(crossover.toString()));
-			mapToPass.putAll(setParameterMap(parameterRepository.findParametersByCrossoverId(crossover.getId())));
+			model.addAttribute("selectedCrossover", crossover.getCrossoverName());
+			crossoverParameters.addAll(setParameterList(parameterRepository.findParametersByCrossoverId(crossover.getId())));
+			algorithmParameters.remove("crossoverOperator->null");
+			model.addAttribute("crossoverParameters", crossoverParameters);
+		} else {
+			model.addAttribute("selectedCrossover", "");
+			model.addAttribute("crossoverParameters", "");
 		}
 		if (mutation != null) {
-			mapToPass.put("mutation", Arrays.asList(mutation.toString()));
-			mapToPass.putAll(setParameterMap(parameterRepository.findParametersByMutationId(mutation.getId())));
+			model.addAttribute("selectedMutation", mutation.getMutationName());
+			mutationParameters.addAll(setParameterList(parameterRepository.findParametersByMutationId(mutation.getId())));
+			algorithmParameters.remove("mutationOperator->null");
+			model.addAttribute("mutationParameters", mutationParameters);
+		} else {
+			model.addAttribute("selectedMutation", "");
+			model.addAttribute("mutationParameters", "");
 		}
 		if (selection != null) {
-			mapToPass.put("selectionOperator", Arrays.asList(selection.toString()));
-			mapToPass.putAll(setParameterMap(parameterRepository.findParametersBySelectionId(selection.getId())));
+			model.addAttribute("selectedSelectionOperator", selection.getSelectionName());
+			selectionParameters.addAll(setParameterList(parameterRepository.findParametersBySelectionId(selection.getId())));
+			algorithmParameters.remove("selectionOperator->null");
+			model.addAttribute("selectionParameters", selectionParameters);
+		} else {
+			model.addAttribute("selectedSelectionOperator", "");
+			model.addAttribute("selectionParameters", "");
 		}
+		
+		model.addAttribute("algorithmParameters", algorithmParameters);
 
-		/*
-		 * new Thread(() -> { try { experimentResultPage(model, mapToPass); } catch
-		 * (InterruptedException e) { // TODO Auto-generated catch block
-		 * e.printStackTrace(); } });
-		 * 
-		 * processShowResultPage();
-		 */
+		int runCount = experimentList.get(0).getNumberOfRepetition();
+		model.addAttribute("experimentName", id);
+		model.addAttribute("numberOfRepetition", runCount);
+		Boolean[] finishedTh = new Boolean[runCount];
+		finishedTh[runCount - 1] = false;
+		initiateFinished(runCount);
+		final String finalId = id;
+		new Thread(() -> {
+			processInitiateExperiment(finalId, algorithm, problem, crossover,
+					mutation, selection, runCount, finishedTh);
+		}).start();
+
+//		new Thread(() -> {
+//				try {
+//					experimentResultPage(model, mapToPass);
+//				} catch (ServletException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//		}).start();;
+
+
 	}
 
-	@RequestMapping("/showExperiment")
-	public String showExpe(Model model, @RequestBody LinkedMultiValueMap<String, String> value) {
+	@RequestMapping(value="/showExperiment",params="view",method=RequestMethod.POST)
+	public String showExpe(Model model, @RequestBody LinkedMultiValueMap<String, String> value) throws ServletException, InterruptedException  {
 
 		String id = value.get("experimentList").get(0);
 		List<WebPageExperiment> experimentList = experimentRepository.getAllExperimentById(id);
@@ -506,33 +546,45 @@ public class MainPageController {
 		selection = experimentList.get(0).getSelectionOperator();
 		mutation = experimentList.get(0).getMutation();
 
-		List<String> parameters = new ArrayList<>();
-		parameters.addAll(setParameterList(parameterRepository.findParametersByProblemId(problem.getId())));
-		parameters.addAll(setParameterList(parameterRepository.findParametersByAlgorithmId(algorithm.getId())));
+		List<String> problemParameters = new ArrayList<>();
+		List<String> algorithmParameters = new ArrayList<>();
+		List<String> crossoverParameters = new ArrayList<>();
+		List<String> mutationParameters = new ArrayList<>();
+		List<String> selectionParameters = new ArrayList<>();
+		problemParameters.addAll(setParameterList(parameterRepository.findParametersByProblemId(problem.getId())));
+		algorithmParameters.addAll(setParameterList(parameterRepository.findParametersByAlgorithmId(algorithm.getId())));
 
 		model.addAttribute("experimentName", id);
 		model.addAttribute("numberOfRepetition", experimentList.get(0).getNumberOfRepetition());
 		model.addAttribute("selectedAlgorithm", algorithm.getAlgorithmName());
 		model.addAttribute("selectedProblem", problem.getProblemName());
+		model.addAttribute("problemParameters", problemParameters);
 		if (crossover != null) {
 			model.addAttribute("selectedCrossover", crossover.getCrossoverName());
-			parameters.addAll(setParameterList(parameterRepository.findParametersByCrossoverId(crossover.getId())));
+			crossoverParameters.addAll(setParameterList(parameterRepository.findParametersByCrossoverId(crossover.getId())));
+			algorithmParameters.remove("crossoverOperator->null");
 		} else {
 			model.addAttribute("selectedCrossover", "");
 		}
 		if (mutation != null) {
 			model.addAttribute("selectedMutation", mutation.getMutationName());
-			parameters.addAll(setParameterList(parameterRepository.findParametersByMutationId(mutation.getId())));
+			mutationParameters.addAll(setParameterList(parameterRepository.findParametersByMutationId(mutation.getId())));
+			algorithmParameters.remove("mutationOperator->null");
 		} else {
 			model.addAttribute("selectedMutation", "");
 		}
 		if (selection != null) {
 			model.addAttribute("selectedSelectionOperator", selection.getSelectionName());
-			parameters.addAll(setParameterList(parameterRepository.findParametersBySelectionId(selection.getId())));
+			selectionParameters.addAll(setParameterList(parameterRepository.findParametersBySelectionId(selection.getId())));
+			algorithmParameters.remove("selectionOperator->null");
 		} else {
 			model.addAttribute("selectedSelectionOperator", "");
 		}
-		model.addAttribute("parameters", parameters);
+		
+		model.addAttribute("crossoverParameters", crossoverParameters);
+		model.addAttribute("mutationParameters", mutationParameters);
+		model.addAttribute("selectionParameters", selectionParameters);
+		model.addAttribute("algorithmParameters", algorithmParameters);
 
 		initiateFinished(experimentList.size());
 		Boolean[] finishAux = new Boolean[experimentList.size()];
@@ -545,7 +597,7 @@ public class MainPageController {
 		return "experimentResultPage";
 
 	}
-	
+
 	public List<String> setParameterList(List<Parameter> params) {
 		List<String> parameters = new ArrayList<>();
 		for (int i = 0; i < params.size(); i++) {

@@ -2,32 +2,32 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>JMetal</title>
-	<link rel="stylesheet" href="css/bootstrapCSS.css">
-	<link rel="stylesheet" href="css/myExperimentPageCSS.css">
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
-	<script type="text/javascript" src="js/jquery.min.js"></script>
-	<script type="text/javascript" src="js/myExperiment.js"></script>
+<title>jMetal</title>
+<link rel="stylesheet" href="css/bootstrapCSS.css">
+<link rel="stylesheet" href="css/myExperimentPageCSS.css">
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/myExperiment.js"></script>
 </head>
 <body id="myExperimentsPage">
 
 	{{>header}}
-	<form action="showExperiment"  method="post">
-		
-		<i><h3>My Experiments</h3></i>
-			<select id="experimentList" class="custom-select" name="experimentList" >
-			</select>
-			
-			<div class="col-md-12 form-group text-center" style="margin-top: 10px">
-				<p>
-					<input class="btn btn-outline-secondary"  type="submit" value="View">
-				</p>
-				<p>
-					<input class="btn btn-outline-secondary disabled"  value="Play again">
-				</p>
-			</div>
-		</form>
-	
+	<form action="showExperiment" method="post">
+
+		<i><h3>My Experiments</h3></i> <select id="experimentList"
+			class="custom-select" name="experimentList">
+		</select>
+
+		<div class="col-md-12 form-group text-center" style="margin-top: 10px">
+			<p>
+				<input class="btn btn-outline-secondary" type="submit" name="view" value="View">
+			</p>
+			<p>
+				<input class="btn btn-outline-secondary disabled" type="submit" name="runAgain" value="Run again">
+			</p>
+		</div>
+	</form>
+
 
 </body>
 </html>

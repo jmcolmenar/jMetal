@@ -34,19 +34,19 @@ function drawLiveLineChart(category, series) {
 		},
 
 		title : {
-			text : 'Result'
+			text : 'Actual iteration'
 		},
 
 		xAxis : {
 			title : {
-				text : 'Intent'
+				text : 'Generational'
 			},
 			categories : category
 		},
 
 		yAxis : [ {
 			title : {
-				text : 'Result'
+				text : 'Best value'
 			},
 			plotLines : [ {
 				value : 0,
@@ -118,14 +118,29 @@ function showFinalResult(id) {
 		var resultText = document.createTextNode(name+"-> {"+finalResult+"}.    ");
 		resultLI.appendChild(resultText);
 		document.getElementById("finalResult").appendChild(resultLI);
+	});
+	
+	
+}
+
+function showAllPopulation(id,div) {
+	$.get("/getFinalResult/"+id, function(result) {
+		var name = (JSON.parse(result).name);
+		var finalResult = (JSON.parse(result).finalResult);
+		var finalPopulation = (JSON.parse(result).finalPopulation);
 		
-		
-		var ul = document.getElementById("finalPopulation");
+		var pilotDiv = document.getElementById(div);
+		var h5 = document.createElement("H5");
+		var resultText = document.createTextNode("The population for the last generation is: ");
+		h5.appendChild(resultText);
+		pilotDiv.appendChild(h5);
+		var ul = document.createElement("UL");
 		var populationLI = document.createElement("LI");
 	    var populationText = document.createTextNode(name+"-> "+finalPopulation);
 	    populationLI.appendChild(populationText);
 	    populationLI.setAttribute("border", "1px solid");
 	    ul.appendChild(populationLI);
+	    pilotDiv.appendChild(ul);
 	});
 	
 	
@@ -138,6 +153,7 @@ function drawFullChart() {
 		var se = (JSON.parse(result).series);
 		var names = (JSON.parse(result).names);
 		var x;
+		var j = 1;
 		for(x in cat){
 			var div = document.createElement("DIV");
 			var newDiv = "allResultsGrafics"+x;
@@ -146,8 +162,9 @@ function drawFullChart() {
 			document.getElementById("allResultsGrafics").appendChild(div);
 			var newCat = cat[x];
 			var newSe = se[x];
-			
-			drawChart(newCat, newSe,names[x],newDiv);
+			showAllPopulation(j,newDiv);
+			j++;
+			drawChart(newCat, newSe,"Best generational pilot of experiment -> "+names[x],newDiv);
 		}
 	});
 }
@@ -176,14 +193,14 @@ function drawChart(category, series,name,div) {
 
 		xAxis : {
 			title : {
-				text : 'Intent'
+				text : 'Generational'
 			},
 			categories : category
 		},
 
 		yAxis : [ {
 			title : {
-				text : 'Result'
+				text : 'Best Value'
 			},
 			plotLines : [ {
 				value : 0,

@@ -51,7 +51,8 @@ public class ElitistEvolutionStrategyWebPage<S extends Solution<?>>  extends Eli
 	}
 
 	public void rightResult() {
-		Result resultSave = new Result((getResult().getObjective(0)), experiment);
+		double roundedResult = Math.round((getResult().getObjective(0)) * 100.0) / 100.0;
+		Result resultSave = new Result(roundedResult, experiment);
 		resultRepository.save(resultSave);
 	}
 }
