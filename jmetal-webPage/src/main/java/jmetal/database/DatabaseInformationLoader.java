@@ -484,7 +484,7 @@ public class DatabaseInformationLoader {
 			WebPageMutation mu7 = new WebPageMutation("CDGMutation", "DoubleSolution", 0);
 			mutationRepository.save(mu7);
 
-			Parameter par13 = new Parameter("DoubleProblem", "problem");
+			Parameter par13 = new Parameter("DoubleProblem", "CDGproblem");
 			Parameter par14 = new Parameter("double", "delta");
 			parameterRepository.save(par13);
 			parameterRepository.save(par14);
@@ -550,7 +550,7 @@ public class DatabaseInformationLoader {
 			mutationRepository.save(mu12);
 
 			// ---------------------------------PolynomialMutation----------------------------------
-			Parameter par27 = new Parameter("DoubleProblem", "problem");
+			Parameter par27 = new Parameter("DoubleProblem", "PMproblem");
 			Parameter par28 = new Parameter("double", "distributionIndex");
 			parameterRepository.save(par27);
 			parameterRepository.save(par28);
@@ -560,7 +560,7 @@ public class DatabaseInformationLoader {
 			WebPageMutation mu13 = new WebPageMutation("PolynomialMutation", "DoubleSolution", 2, parameterLists);
 			mutationRepository.save(mu13);
 
-			Parameter par29 = new Parameter("DoubleProblem", "problem");
+			Parameter par29 = new Parameter("DoubleProblem", "PMproblem");
 			Parameter par30 = new Parameter("double", "distributionIndex");
 			Parameter par31 = new Parameter("RandomGenerator-Double", "mutationRandomGenerator");
 			parameterRepository.save(par29);

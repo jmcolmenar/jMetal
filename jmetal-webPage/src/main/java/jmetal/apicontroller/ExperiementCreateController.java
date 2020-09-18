@@ -1064,7 +1064,7 @@ public class ExperiementCreateController  {
 					mutationToReturn =  (MutationOperator<T>) new CDGMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("delta").getParameterValue()), new RepairDoubleSolutionAtBounds());
 				}else if((parameter.get("mutationProbability")!= null) && (parameter.get("delta") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new CDGMutation(Double.parseDouble(parameter.get("mutationProbability").getParameterValue()), Double.parseDouble(parameter.get("delta").getParameterValue()));
-				}else if((problem.getSolutionType() == "DoubleSolution") && (parameter.get("delta") != null)) {
+				}else if((experiment.getProblem().getSolutionType().equals("DoubleSolution")) && (parameter.get("delta") != null) && (parameter.get("CDGproblem") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new CDGMutation((DoubleProblem) mutationProblem, Double.parseDouble(parameter.get("delta").getParameterValue()));
 				}else {
 					mutationToReturn = (MutationOperator<T>) new CDGMutation() ;
@@ -1080,9 +1080,9 @@ public class ExperiementCreateController  {
 				break;
 				
 			case"PolynomialMutation":
-				if((problem.getSolutionType() == "DoubleSolution") && (parameter.get("distributionIndex") != null) && (parameter.get("mutationRandomGenerator") != null)) {
+				if((experiment.getProblem().getSolutionType().equals("DoubleSolution"))  && (parameter.get("PMproblem") != null) && (parameter.get("distributionIndex") != null) && (parameter.get("mutationRandomGenerator") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new PolynomialMutation((DoubleProblem) mutationProblem, Double.parseDouble(parameter.get("distributionIndex").getParameterValue()), () -> JMetalRandom.getInstance().nextDouble());
-				}else if((problem.getSolutionType() == "DoubleSolution") && (parameter.get("distributionIndex") != null)) {
+				}else if((experiment.getProblem().getSolutionType().equals("DoubleSolution"))  && (parameter.get("PMproblem") != null) && (parameter.get("distributionIndex") != null)) {
 					mutationToReturn =  (MutationOperator<T>) new PolynomialMutation((DoubleProblem) mutationProblem, Double.parseDouble(parameter.get("distributionIndex").getParameterValue()));
 				}else 
 					if((parameter.get("mutationProbability")!= null) && (parameter.get("distributionIndex") != null) && (parameter.get("mutationSolutionRepair") != null) && (parameter.get("mutationRandomGenerator") != null)) {
