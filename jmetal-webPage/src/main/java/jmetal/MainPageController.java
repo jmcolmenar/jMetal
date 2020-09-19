@@ -431,7 +431,7 @@ public class MainPageController {
 	}
 
 	@RequestMapping(value="/showExperiment",params="runAgain",method=RequestMethod.POST)
-	public void rerunExperiment(Model model, @RequestBody LinkedMultiValueMap<String, String> value){
+	public String rerunExperiment(Model model, @RequestBody LinkedMultiValueMap<String, String> value){
 		List<WebPageExperiment> experimentList = experimentRepository.getAllExperimentById(value.getFirst("experimentList"));
 		WebPageProblem problem;
 		WebPageAlgorithm algorithm;
@@ -510,10 +510,33 @@ public class MainPageController {
 		initiateFinished(runCount);
 		final String finalId = id;
 		new Thread(() -> {
-			processInitiateExperiment(finalId, algorithm, problem, crossover,
-					mutation, selection, runCount, finishedTh);
-		}).start();
+			
+			for (int j = 1; j <= runCount; j++) {
 
+				finishedTh[j - 1] = false;
+				String idAux = finalId + j;
+				WebPageExperiment exp = new WebPageExperiment(idAux, algorithm, problem,
+						crossover, mutation, selection, runCount);
+				experimentRepository.save(exp);
+				setExperiment(exp);
+
+				ExperiementCreateController experiementCreateController = new ExperiementCreateController(exp,
+						experimentRepository, resultRepository, finalresultsRepository, problemRepository,
+						algorithmRepository, crossoverRepository, mutationRepository, selectionRepository,
+						parameterRepository);
+
+				try {
+					processRunExperiment(experiementCreateController, j, finishedTh);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				pushed = true;
+				while (pushed) {
+				}
+				setFinished(finishedTh);
+			}
+		}).start();
+			return "experimentResultPage";
 //		new Thread(() -> {
 //				try {
 //					experimentResultPage(model, mapToPass);
@@ -532,7 +555,7 @@ public class MainPageController {
 	@RequestMapping(value="/showExperiment",params="view",method=RequestMethod.POST)
 	public String showExpe(Model model, @RequestBody LinkedMultiValueMap<String, String> value) throws ServletException, InterruptedException  {
 
-		String id = value.get("experimentList").get(0);
+		String id = value.get("experimentList").get(0)+"-";
 		List<WebPageExperiment> experimentList = experimentRepository.getAllExperimentById(id);
 		WebPageProblem problem;
 		WebPageAlgorithm algorithm;
