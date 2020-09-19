@@ -49,7 +49,6 @@ public class ApiShowMyExperiments {
 		long expeListLenght = experimentRepository.count();
 		while(expeListLenght > experimentList.size()) {
 		}
-		System.out.println(expeListLenght);
 		for (WebPageExperiment webPageExperiment : experimentList) {
 			problem = webPageExperiment.getProblem();
 			algorithm = webPageExperiment.getAlgorithm();
