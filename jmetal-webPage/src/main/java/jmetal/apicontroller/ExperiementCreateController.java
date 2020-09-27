@@ -59,11 +59,14 @@ import org.uma.jmetal.solution.BinarySolution;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.IntegerSolution;
 import org.uma.jmetal.solution.PermutationSolution;
+import org.uma.jmetal.solution.Solution;
 import org.uma.jmetal.solution.util.RepairDoubleSolutionAtBounds;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.binarySet.BinarySet;
 import org.uma.jmetal.util.comparator.DominanceComparator;
 import org.uma.jmetal.util.comparator.ObjectiveComparator;
+import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
+import org.uma.jmetal.util.comparator.RankingAndSSDComparator;
 import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 import org.uma.jmetal.util.pseudorandom.JMetalRandom;
 
@@ -858,7 +861,7 @@ public class ExperiementCreateController  {
 	
 	
 	private class Helper<T> {
-		private T t;
+
 		@SuppressWarnings("unchecked")
 		public Problem<T> setProblem(WebPageProblem problem){
 			Problem<T> problemToReturn = null;
@@ -1134,7 +1137,7 @@ public class ExperiementCreateController  {
 			switch (selection.getSelectionName()) {
 				case "BinaryTournamentSelection":
 					if((parameter.get("comparator")!= null)) {
-						selectionToReturn =  new BinaryTournamentSelection(new ObjectiveComparator<>(selectionProblem.getNumberOfObjectives())); ;
+						selectionToReturn =  new BinaryTournamentSelection(new RankingAndCrowdingDistanceComparator<Solution<T>>()); ;
 					}else {
 						selectionToReturn =  new BinaryTournamentSelection(); ;
 					}
@@ -1142,12 +1145,12 @@ public class ExperiementCreateController  {
 					break;
 					
 				case"BestSolutionSelection":
-						selectionToReturn =  new BestSolutionSelection(new ObjectiveComparator<>(selectionProblem.getNumberOfObjectives())); ;
+						selectionToReturn =  new BestSolutionSelection(new ObjectiveComparator<Solution<T>>(0));
 					break;
 					
 				case"TournamentSelection":
 					if((parameter.get("comparator")!= null) && (parameter.get("n_arity")!= null)) {
-						selectionToReturn =  new TournamentSelection(new ObjectiveComparator<>(selectionProblem.getNumberOfObjectives()), Integer.parseInt(parameter.get("n_arity").getParameterValue())); ;
+						selectionToReturn =  new TournamentSelection(new DominanceComparator<Solution<T>>(), Integer.parseInt(parameter.get("n_arity").getParameterValue())); ;
 					}else {
 						selectionToReturn =  new TournamentSelection(Integer.parseInt(parameter.get("n_arity").getParameterValue())); ;
 					}
@@ -1155,7 +1158,7 @@ public class ExperiementCreateController  {
 					
 				case"SpatialSpreadDeviationSelection":
 					if((parameter.get("comparator")!= null) && (parameter.get("numberOfTournaments")!= null)) {
-						selectionToReturn =  new SpatialSpreadDeviationSelection(new ObjectiveComparator<>(selectionProblem.getNumberOfObjectives()), Integer.parseInt(parameter.get("numberOfTournaments").getParameterValue())); ;
+						selectionToReturn =  new SpatialSpreadDeviationSelection(new ObjectiveComparator<Solution<T>>(0),Integer.parseInt(parameter.get("numberOfTournaments").getParameterValue())); ;
 					}else {
 						selectionToReturn =  new SpatialSpreadDeviationSelection(Integer.parseInt(parameter.get("numberOfTournaments").getParameterValue())); ;
 					}
@@ -1163,7 +1166,7 @@ public class ExperiementCreateController  {
 					
 				case"NaryTournamentSelection":
 					if((parameter.get("numberOfSolutionsToBeReturned")!= null) && (parameter.get("comparator")!= null)) {
-						selectionToReturn =  new NaryTournamentSelection(Integer.parseInt(parameter.get("numberOfSolutionsToBeReturned").getParameterValue()), new ObjectiveComparator<>(selectionProblem.getNumberOfObjectives())); ;
+						selectionToReturn =  new NaryTournamentSelection(Integer.parseInt(parameter.get("numberOfSolutionsToBeReturned").getParameterValue()),  new DominanceComparator<Solution<T>>()); ;
 					}else {
 						selectionToReturn =  new NaryTournamentSelection();
 					}
@@ -1204,7 +1207,7 @@ public class ExperiementCreateController  {
 			
 			case"RankingAndCrowdingSelection":
 				if((parameter.get("solutionsToSelect")!= null) && (parameter.get("dominanceComparator")!= null)) {
-					selectionToReturn = new RankingAndCrowdingSelection(Integer.parseInt(parameter.get("solutionsToSelect").getParameterValue()), new DominanceComparator<>()); ;
+					selectionToReturn = new RankingAndCrowdingSelection(Integer.parseInt(parameter.get("solutionsToSelect").getParameterValue()), new DominanceComparator<Solution<T>>()); ;
 				}else {
 					selectionToReturn = new RankingAndCrowdingSelection(Integer.parseInt(parameter.get("solutionsToSelect").getParameterValue())); ;
 				}
@@ -1225,44 +1228,6 @@ public class ExperiementCreateController  {
 			return selectionToReturn;
 		}
 		
-	/*	public Algorithm<T> setAlgorithm(WebPageAlgorithm algorithm, Problem<T> selectionProblem){
-			Algorithm<T> algorithmToReturn = null;
-			switch (algorithm.getAlgorithmName()) {
-			case "SteadyStateGeneticAlgorithm":
-				algorithmToReturn = (Algorithm<T>) new SteadyStateGeneticAlgorithmWebFormat<T>(resultRepository,experiment,problem,
-						Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()),Integer.parseInt(parameter.get("populationSize").getParameterValue()),
-				          crossoverOperator, mutationOperator, selectionOperator);
-				
-				new AlgorithmRunner.Executor(algorithm).execute() ;
-
-				result = algorithm.getResult().getObjective(0);
-				population = algorithm.getResult().getVariableValueString(0);
-			    
-				break;
-				
-			case "GenerationalGeneticAlgorithm":				
-				algorithm = new GenerationalGeneticAlgorithmWebFormet<BinarySolution>(resultRepository,experiment,problem,
-						Integer.parseInt(parameter.get("maxEvaluations").getParameterValue()),Integer.parseInt(parameter.get("populationSize").getParameterValue()),
-				          crossoverOperator, mutationOperator, selectionOperator, new SequentialSolutionListEvaluator<BinarySolution>());
-								
-				new AlgorithmRunner.Executor(algorithm).execute() ;
-
-			    result = algorithm.getResult().getObjective(0);
-			    population = algorithm.getResult().getVariableValueString(0);
-			    
-				break;
-			default:
-				break;
-			}
-			
-			
-			return algorithmToReturn;
-		}*/
-		
-	}
-	
-	private String showErrorPage(Model model, IOException e) {
-		return "error";
 	}
 	
 }

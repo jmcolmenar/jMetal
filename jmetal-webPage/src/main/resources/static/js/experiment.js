@@ -10,12 +10,50 @@ $.ajax({
 
 function hideAll(){
 	$("#algorithms").hide();
-	$("#algorithms").hide();
 	$("#crossoverOperator").hide();
 	$("#mutationOperator").hide();
 	$("#selectionOperator").hide();
 	$("#algorithmDescription").hide();
-	
+	//remove algoritm params
+	var paramsDiv = document.getElementById("algorithmParams");
+    var eleIn = paramsDiv.getElementsByTagName("INPUT");
+    while(eleIn.length >0){
+    	eleIn[0].remove();
+    }
+    var eleBr = paramsDiv.getElementsByTagName("BR");
+    while(eleBr.length >0){
+    	eleBr[0].remove();
+    }
+  //remove algoritm params
+	var paramsDiv = document.getElementById("crossoverParams");
+    var eleIn = paramsDiv.getElementsByTagName("INPUT");
+    while(eleIn.length >0){
+    	eleIn[0].remove();
+    }
+    var eleBr = paramsDiv.getElementsByTagName("BR");
+    while(eleBr.length >0){
+    	eleBr[0].remove();
+    }
+  //remove algoritm params
+	var paramsDiv = document.getElementById("mutationParams");
+    var eleIn = paramsDiv.getElementsByTagName("INPUT");
+    while(eleIn.length >0){
+    	eleIn[0].remove();
+    }
+    var eleBr = paramsDiv.getElementsByTagName("BR");
+    while(eleBr.length >0){
+    	eleBr[0].remove();
+    }
+  //remove algoritm params
+	var paramsDiv = document.getElementById("selectionParams");
+    var eleIn = paramsDiv.getElementsByTagName("INPUT");
+    while(eleIn.length >0){
+    	eleIn[0].remove();
+    }
+    var eleBr = paramsDiv.getElementsByTagName("BR");
+    while(eleBr.length >0){
+    	eleBr[0].remove();
+    }
 }
 
 function getProblems() {
@@ -109,9 +147,16 @@ function setParams(params,paramsTypes){
 			if (par[1] == "double"){
 				y.setAttribute("step", "0.01");
 			}
-			y.setAttribute("placeholder", par[0]);
-			y.setAttribute("name", par[0]);
+			if (par[0] == ("swarmSize")){
+				y.setAttribute("placeholder", par[0]+" ->	(must bigger then 'numberOfParticlesToInform')");
+			}else
+			if (par[0] == ("numberOfParticlesToInform")){
+				y.setAttribute("placeholder", par[0]+" ->	(must lower then 'swarmSize')");
+			}else{
+				y.setAttribute("placeholder", par[0]);
+			}
 			y.setAttribute("class", "form-control");
+			y.setAttribute("name", par[0]);
 			y.setAttribute("min", "0");
 			y.setAttribute("required", "required");
 		
@@ -136,7 +181,8 @@ function setParams(params,paramsTypes){
 			paramsDiv.appendChild(y);
 		}else if(par[0] == "distanceFile"){
 			showTSPs();
-		}else if (par[1] != "MutationOperator" && par[1] != "CrossoverOperator" && par[1] != "SelectionOperator" && par[1] != "DifferentialEvolutionCrossover" && par[1] != "DifferentialEvolutionSelection"){
+		}else if (par[1] != "MutationOperator" && par[1] != "CrossoverOperator" && par[1] != "SelectionOperator" 
+			&& par[1] != "DifferentialEvolutionCrossover" && par[1] != "DifferentialEvolutionSelection"){
 			var y = document.createElement("INPUT");
 			y.setAttribute("type", "text");
 			y.setAttribute("placeholder","(Optional) " + par[0]);

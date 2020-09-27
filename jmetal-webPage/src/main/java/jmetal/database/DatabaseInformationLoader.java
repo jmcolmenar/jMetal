@@ -299,15 +299,6 @@ public class DatabaseInformationLoader {
 
 			// ---------------------------------SpatialSpreadDeviationSelection----------------------------------
 
-			Parameter par6 = new Parameter("int", "numberOfTournaments");
-			parameterRepository.save(par6);
-
-			parameterLists.clear();
-			parameterLists.add(par6);
-			WebPageSelection sl6 = new WebPageSelection("SpatialSpreadDeviationSelection", "GENERIC", "singleList", 1,
-					parameterLists);
-			selectionRepository.save(sl6);
-
 			Parameter par7 = new Parameter("Comparator-GENERIC", "comparator");
 			Parameter par8 = new Parameter("int", "numberOfTournaments");
 			parameterRepository.save(par7);
