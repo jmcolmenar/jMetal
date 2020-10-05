@@ -151,17 +151,17 @@ public class test {
 
 	    mutation = new CDGMutation();
 	    SelectionOperator<List<DoubleSolution>, DoubleSolution> selection;
-	    selection = new SpatialSpreadDeviationSelection<DoubleSolution>(64);
-//	    selection = new BestSolutionSelection<DoubleSolution>(new ObjectiveComparator<DoubleSolution>(0));
+//	    selection = new SpatialSpreadDeviationSelection<DoubleSolution>(64);
+	    selection = new BestSolutionSelection<DoubleSolution>(new ObjectiveComparator<DoubleSolution>(0));
 
-//	    algorithm = new GeneticAlgorithmBuilder<DoubleSolution>(problem, crossover, mutation)
-//	    		.setMaxEvaluations(2500)
-//	    		.setPopulationSize(100)
-//	    		.setSelectionOperator(selection)
-//	    		.setSolutionListEvaluator(new SequentialSolutionListEvaluator<DoubleSolution>())
-//	    		.build();
+	    algorithm = new GeneticAlgorithmBuilder<DoubleSolution>(problem, crossover, mutation)
+	    		.setMaxEvaluations(2500)
+	    		.setPopulationSize(100)
+	    		.setSelectionOperator(selection)
+	    		.setSolutionListEvaluator(new SequentialSolutionListEvaluator<DoubleSolution>())
+	    		.build();
 	    
-	     algorithm = new SteadyStateGeneticAlgorithmWebFormat<DoubleSolution>(null, null, problem, 2500, 100, crossover, mutation, selection);
+//	     algorithm = new SteadyStateGeneticAlgorithmWebFormat<DoubleSolution>(null, null, problem, 2500, 100, crossover, mutation, selection);
 
 	     Algorithm<List<DoubleSolution>> algorithm2;
 //	     algorithm2 = new CoralReefsOptimizationWebPage<DoubleSolution>(null, null, problem, 100, new ObjectiveComparator<DoubleSolution>(0), selection, crossover, mutation, 5, 7, 1, 0.2, 0.5, 0.3, 1);
@@ -172,7 +172,7 @@ public class test {
 	            selection,
 	            new SequentialSolutionListEvaluator<>()) ;
 	     
-     new AlgorithmRunner.Executor(algorithm2)
+     new AlgorithmRunner.Executor(algorithm)
 	            .execute() ;
 
      DoubleSolution solution = algorithm.getResult() ;

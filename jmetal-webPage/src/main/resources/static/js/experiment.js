@@ -24,7 +24,7 @@ function hideAll(){
     while(eleBr.length >0){
     	eleBr[0].remove();
     }
-  //remove algoritm params
+  //remove crossover params
 	var paramsDiv = document.getElementById("crossoverParams");
     var eleIn = paramsDiv.getElementsByTagName("INPUT");
     while(eleIn.length >0){
@@ -34,7 +34,7 @@ function hideAll(){
     while(eleBr.length >0){
     	eleBr[0].remove();
     }
-  //remove algoritm params
+  //remove mutation params
 	var paramsDiv = document.getElementById("mutationParams");
     var eleIn = paramsDiv.getElementsByTagName("INPUT");
     while(eleIn.length >0){
@@ -44,7 +44,7 @@ function hideAll(){
     while(eleBr.length >0){
     	eleBr[0].remove();
     }
-  //remove algoritm params
+  //remove selection params
 	var paramsDiv = document.getElementById("selectionParams");
     var eleIn = paramsDiv.getElementsByTagName("INPUT");
     while(eleIn.length >0){
@@ -89,6 +89,7 @@ function getAlgorithms() {
 	    while(eleIn.length >0){
 	    	eleIn[0].remove();
 	    }
+	    selectAlgorithm.options[selectAlgorithm.options.length] = new Option("Select algorithm", "not selected");
 		for (pb in algorithms) {
 			selectAlgorithm.options[selectAlgorithm.options.length] = new Option(algorithms[pb], algorithms[pb]);
 		}
@@ -207,6 +208,7 @@ function getCrossover(crossover) {
 	    while(eleOp.length >0){
 	    	eleOp[0].remove();
 	    }
+	    selectCrossover.options[selectCrossover.options.length] = new Option("Setect Crossover", "not selected");
 		for (pb in problem) {
 			selectCrossover.options[selectCrossover.options.length] = new Option(problem[pb], problem[pb]);
 		}
@@ -236,6 +238,7 @@ function getMutation() {
 	    while(eleOp.length >0){
 	    	eleOp[0].remove();
 	    }
+	    selectMutation.options[selectMutation.options.length] = new Option("Select mutation", "not selected");
 		for (pb in problem) {
 			selectMutation.options[selectMutation.options.length] = new Option(problem[pb], problem[pb]);
 		}
@@ -265,6 +268,7 @@ function getSelection(listType) {
 	    while(eleOp.length >0){
 	    	eleOp[0].remove();
 	    }
+	    selectSelection.options[selectSelection.options.length] = new Option("Select selection", "not selected");
 		for (pb in problem) {
 			selectSelection.options[selectSelection.options.length] = new Option(problem[pb], problem[pb]);
 		}
