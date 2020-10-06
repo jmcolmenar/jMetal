@@ -41,14 +41,6 @@ public class DifferentialEvolutionWebPage extends DifferentialEvolution{
 		this.maxEvaluations = maxEvaluations;
 	}
 	
-	public DifferentialEvolutionWebPage(
-			DoubleProblem problem, int maxEvaluations, int populationSize,
-			DifferentialEvolutionCrossover crossoverOperator, DifferentialEvolutionSelection selectionOperator,
-			SolutionListEvaluator<DoubleSolution> evaluator) {
-		super(problem, maxEvaluations, populationSize, crossoverOperator, selectionOperator, evaluator);
-		this.maxEvaluations = maxEvaluations;
-	}
-
 	@Override
 	protected boolean isStoppingConditionReached() {
 		return (evaluations >= maxEvaluations);
@@ -62,7 +54,8 @@ public class DifferentialEvolutionWebPage extends DifferentialEvolution{
 	}
 
 	public void rightResult() {
-		Result resultSave = new Result((getResult().getObjective(0)), experiment);
+		double roundedResult = Math.round((getResult().getObjective(0)) * 100.0) / 100.0;
+		Result resultSave = new Result(roundedResult, experiment);
 		resultRepository.save(resultSave);
 	}
 }

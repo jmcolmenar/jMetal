@@ -10,6 +10,8 @@ services:
       - MYSQL_ROOT_HOST=%
     ports:
       - 3306:3306
+    volumes:
+      - jMetal_database:/var/lib/mysql
 
   jmetal-webPage-App:
     image: harenderdhanoya/jmetal-webpage:1.0
@@ -20,3 +22,5 @@ services:
       - DATABASE_HOST=db
     ports:
       - 8080:8080
+volumes:
+  jMetal_database:

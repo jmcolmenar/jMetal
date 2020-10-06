@@ -3,17 +3,57 @@ $.ajax({
 	success : function(result) {
 		hideAll();
 		$("#TSPsSelection").hide();
+		$("#problemDescription").hide();
 		getProblems();
 	}
 });
 
 function hideAll(){
 	$("#algorithms").hide();
-	$("#algorithms").hide();
 	$("#crossoverOperator").hide();
 	$("#mutationOperator").hide();
 	$("#selectionOperator").hide();
-	
+	$("#algorithmDescription").hide();
+	//remove algoritm params
+	var paramsDiv = document.getElementById("algorithmParams");
+    var eleIn = paramsDiv.getElementsByTagName("INPUT");
+    while(eleIn.length >0){
+    	eleIn[0].remove();
+    }
+    var eleBr = paramsDiv.getElementsByTagName("BR");
+    while(eleBr.length >0){
+    	eleBr[0].remove();
+    }
+  //remove crossover params
+	var paramsDiv = document.getElementById("crossoverParams");
+    var eleIn = paramsDiv.getElementsByTagName("INPUT");
+    while(eleIn.length >0){
+    	eleIn[0].remove();
+    }
+    var eleBr = paramsDiv.getElementsByTagName("BR");
+    while(eleBr.length >0){
+    	eleBr[0].remove();
+    }
+  //remove mutation params
+	var paramsDiv = document.getElementById("mutationParams");
+    var eleIn = paramsDiv.getElementsByTagName("INPUT");
+    while(eleIn.length >0){
+    	eleIn[0].remove();
+    }
+    var eleBr = paramsDiv.getElementsByTagName("BR");
+    while(eleBr.length >0){
+    	eleBr[0].remove();
+    }
+  //remove selection params
+	var paramsDiv = document.getElementById("selectionParams");
+    var eleIn = paramsDiv.getElementsByTagName("INPUT");
+    while(eleIn.length >0){
+    	eleIn[0].remove();
+    }
+    var eleBr = paramsDiv.getElementsByTagName("BR");
+    while(eleBr.length >0){
+    	eleBr[0].remove();
+    }
 }
 
 function getProblems() {
@@ -36,6 +76,10 @@ function getAlgorithms() {
 		
 		var algorithms = (JSON.parse(result).algorithmsName);
 		var problemParams = (JSON.parse(result).problemParams);
+		var problemDescription = (JSON.parse(result).problemDescription);
+		$("#problemDescription").show();
+		var text = document.getElementById('problemDescription');
+		text.innerHTML = problemDescription;
 		
 		var algorithmView = document.getElementById('algorithms');
 		algorithmView = true;
@@ -45,6 +89,7 @@ function getAlgorithms() {
 	    while(eleIn.length >0){
 	    	eleIn[0].remove();
 	    }
+	    selectAlgorithm.options[selectAlgorithm.options.length] = new Option("Select algorithm", "not selected");
 		for (pb in algorithms) {
 			selectAlgorithm.options[selectAlgorithm.options.length] = new Option(algorithms[pb], algorithms[pb]);
 		}
@@ -58,10 +103,14 @@ function getAlgorithms() {
 function setAlgorithmParams() {
 	hideAll();
 	$("#algorithms").show();
+	
 	var algorithm = document.getElementById('selectAlgorithm').value;
 	$.get("/getAlgorithmParams/"+algorithm, function(result) {
 		var algorithmParams = (JSON.parse(result).algorithmParams);
-		
+		var algorithmDescription = (JSON.parse(result).algorithmDescription);
+		$("#algorithmDescription").show();
+		var text = document.getElementById('algorithmDescription');
+		text.innerHTML = algorithmDescription;
 		var typeParam = "algorithmParams";
 		setParams(algorithmParams,typeParam);
 	});
@@ -99,9 +148,16 @@ function setParams(params,paramsTypes){
 			if (par[1] == "double"){
 				y.setAttribute("step", "0.01");
 			}
-			y.setAttribute("placeholder", par[0]);
-			y.setAttribute("name", par[0]);
+			if (par[0] == ("swarmSize")){
+				y.setAttribute("placeholder", par[0]+" ->	(must bigger then 'numberOfParticlesToInform')");
+			}else
+			if (par[0] == ("numberOfParticlesToInform")){
+				y.setAttribute("placeholder", par[0]+" ->	(must lower then 'swarmSize')");
+			}else{
+				y.setAttribute("placeholder", par[0]);
+			}
 			y.setAttribute("class", "form-control");
+			y.setAttribute("name", par[0]);
 			y.setAttribute("min", "0");
 			y.setAttribute("required", "required");
 		
@@ -126,7 +182,8 @@ function setParams(params,paramsTypes){
 			paramsDiv.appendChild(y);
 		}else if(par[0] == "distanceFile"){
 			showTSPs();
-		}else if (par[1] != "MutationOperator" && par[1] != "CrossoverOperator" && par[1] != "SelectionOperator" && par[1] != "DifferentialEvolutionCrossover" && par[1] != "DifferentialEvolutionSelection"){
+		}else if (par[1] != "MutationOperator" && par[1] != "CrossoverOperator" && par[1] != "SelectionOperator" 
+			&& par[1] != "DifferentialEvolutionCrossover" && par[1] != "DifferentialEvolutionSelection"){
 			var y = document.createElement("INPUT");
 			y.setAttribute("type", "text");
 			y.setAttribute("placeholder","(Optional) " + par[0]);
@@ -151,6 +208,7 @@ function getCrossover(crossover) {
 	    while(eleOp.length >0){
 	    	eleOp[0].remove();
 	    }
+	    selectCrossover.options[selectCrossover.options.length] = new Option("Setect Crossover", "not selected");
 		for (pb in problem) {
 			selectCrossover.options[selectCrossover.options.length] = new Option(problem[pb], problem[pb]);
 		}
@@ -180,6 +238,7 @@ function getMutation() {
 	    while(eleOp.length >0){
 	    	eleOp[0].remove();
 	    }
+	    selectMutation.options[selectMutation.options.length] = new Option("Select mutation", "not selected");
 		for (pb in problem) {
 			selectMutation.options[selectMutation.options.length] = new Option(problem[pb], problem[pb]);
 		}
@@ -209,6 +268,7 @@ function getSelection(listType) {
 	    while(eleOp.length >0){
 	    	eleOp[0].remove();
 	    }
+	    selectSelection.options[selectSelection.options.length] = new Option("Select selection", "not selected");
 		for (pb in problem) {
 			selectSelection.options[selectSelection.options.length] = new Option(problem[pb], problem[pb]);
 		}

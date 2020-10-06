@@ -12,17 +12,33 @@ import java.util.List;
 import org.hibernate.validator.internal.util.privilegedactions.GetClassLoader;
 import org.junit.Test;
 import org.uma.jmetal.algorithm.Algorithm;
+import org.uma.jmetal.algorithm.multiobjective.fame.FAME;
+import org.uma.jmetal.algorithm.singleobjective.coralreefsoptimization.CoralReefsOptimizationBuilder;
 import org.uma.jmetal.algorithm.singleobjective.geneticalgorithm.GeneticAlgorithmBuilder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
+import org.uma.jmetal.operator.Operator;
 import org.uma.jmetal.operator.SelectionOperator;
+import org.uma.jmetal.operator.impl.crossover.BLXAlphaCrossover;
 import org.uma.jmetal.operator.impl.crossover.PMXCrossover;
+import org.uma.jmetal.operator.impl.mutation.CDGMutation;
 import org.uma.jmetal.operator.impl.mutation.PermutationSwapMutation;
+import org.uma.jmetal.operator.impl.selection.BestSolutionSelection;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
+import org.uma.jmetal.operator.impl.selection.SpatialSpreadDeviationSelection;
 import org.uma.jmetal.problem.Problem;
+import org.uma.jmetal.problem.singleobjective.Rosenbrock;
+import org.uma.jmetal.solution.BinarySolution;
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.PermutationSolution;
 import org.uma.jmetal.util.AlgorithmRunner;
+import org.uma.jmetal.util.comparator.ObjectiveComparator;
+import org.uma.jmetal.util.comparator.RankingAndSSDComparator;
+import org.uma.jmetal.util.evaluator.impl.SequentialSolutionListEvaluator;
 
+import jmetal.algorithms.CoralReefsOptimizationWebPage;
+import jmetal.algorithms.GenerationalGeneticAlgorithmWebFormet;
+import jmetal.algorithms.SteadyStateGeneticAlgorithmWebFormat;
 import jmetal.problems.TSPWebPage;
 
 public class test {
@@ -126,43 +142,45 @@ public class test {
 
 	public static void main(String[] args) throws Exception {
 
-		Problem<PermutationSolution<Integer>> problem;
-	    Algorithm<PermutationSolution<Integer>> algorithm;
-	    CrossoverOperator<PermutationSolution<Integer>> crossover;
-	    MutationOperator<PermutationSolution<Integer>> mutation;
-	    SelectionOperator<List<PermutationSolution<Integer>>, PermutationSolution<Integer>> selection;
-		String path = "";
+		Problem<DoubleSolution> problem;
+	    Algorithm<DoubleSolution> algorithm;
+	    CrossoverOperator<DoubleSolution> crossover = new BLXAlphaCrossover(1);
+	    MutationOperator<DoubleSolution> mutation;
 	    
-		Path p = Paths.get(System. getProperty("user.dir"), "TSPFiles");
-		System.out.println(p);
-		path = p.toString();
-		System.out.println(path);
-	    problem = new TSPWebPage(path+"/test.tsp");
+	    problem = new Rosenbrock(64);
 
-	    crossover = new PMXCrossover(0.9) ;
+	    mutation = new CDGMutation();
+	    SelectionOperator<List<DoubleSolution>, DoubleSolution> selection;
+//	    selection = new SpatialSpreadDeviationSelection<DoubleSolution>(64);
+	    selection = new BestSolutionSelection<DoubleSolution>(new ObjectiveComparator<DoubleSolution>(0));
 
-	    double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
-	    mutation = new PermutationSwapMutation<Integer>(mutationProbability) ;
+	    algorithm = new GeneticAlgorithmBuilder<DoubleSolution>(problem, crossover, mutation)
+	    		.setMaxEvaluations(2500)
+	    		.setPopulationSize(100)
+	    		.setSelectionOperator(selection)
+	    		.setSolutionListEvaluator(new SequentialSolutionListEvaluator<DoubleSolution>())
+	    		.build();
+	    
+//	     algorithm = new SteadyStateGeneticAlgorithmWebFormat<DoubleSolution>(null, null, problem, 2500, 100, crossover, mutation, selection);
 
-	    selection = new BinaryTournamentSelection<PermutationSolution<Integer>>();
-
-	    algorithm = new GeneticAlgorithmBuilder<>(problem, crossover, mutation)
-	            .setPopulationSize(100)
-	            .setMaxEvaluations(250000)
-	            .setSelectionOperator(selection)
-	            .build() ;
-
-	    AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
+	     Algorithm<List<DoubleSolution>> algorithm2;
+//	     algorithm2 = new CoralReefsOptimizationWebPage<DoubleSolution>(null, null, problem, 100, new ObjectiveComparator<DoubleSolution>(0), selection, crossover, mutation, 5, 7, 1, 0.2, 0.5, 0.3, 1);
+	    algorithm2 = new FAME<>(problem,
+	            100,
+	            10,
+	            2500,
+	            selection,
+	            new SequentialSolutionListEvaluator<>()) ;
+	     
+     new AlgorithmRunner.Executor(algorithm)
 	            .execute() ;
 
-	    PermutationSolution<Integer> solution = algorithm.getResult() ;
-	    List<PermutationSolution<Integer>> population = new ArrayList<>(1) ;
-	    population.add(solution) ;
-
-	    long computingTime = algorithmRunner.getComputingTime() ;
-
+     DoubleSolution solution = algorithm.getResult() ;
+//     List<DoubleSolution> solution = algorithm2.getResult() ;
+	    
 	    System.out.println(solution);
 
+	    
 	}
 
 }

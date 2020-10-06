@@ -76,10 +76,9 @@ public class ApiExperiments {
 	@ResponseBody
 	public String getAlgorithmsList(@PathVariable String resultType) {
 		String[] results = resultType.split("-");
-		
+		WebPageProblem problem = problemRepository.getOne(Long.valueOf(results[0]));
 		List<Parameter> parameters = parameterRepository.findParametersByProblemId(Long.valueOf(results[0]));
 		List<String> problemParams = getProblemParams(parameters);
-		
 		List<WebPageAlgorithm>	alrithmsList= algorithmRepository.findBySolutionType(results[results.length-1]);
 		
 		JSONArray jsonAlgorithmsName = new JSONArray();
@@ -95,6 +94,7 @@ public class ApiExperiments {
 		
 		jsonObject.putOpt("algorithmsName", jsonAlgorithmsName);
 		jsonObject.putOpt("problemParams", jsonProblemParams);
+		jsonObject.putOpt("problemDescription", problem.getDescription());
 		return jsonObject.toString();
 	}
 	
@@ -105,7 +105,7 @@ public class ApiExperiments {
 		
 		List<Parameter> parameters = parameterRepository.findParametersByAlgorithmId(Long.valueOf(algo[0]));
 		List<String> problemParams = getProblemParams(parameters);
-		
+		WebPageAlgorithm algorithmD = algorithmRepository.findOne(Long.valueOf(algo[0]));
 		JSONArray jsonAlgorithmParams = new JSONArray();
 		JSONObject jsonObject = new JSONObject();
 		
@@ -114,6 +114,7 @@ public class ApiExperiments {
 		}
 	
 		jsonObject.putOpt("algorithmParams", jsonAlgorithmParams);
+		jsonObject.putOpt("algorithmDescription", algorithmD.getDescription());
 		return jsonObject.toString();
 	}
 	

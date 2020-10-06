@@ -31,9 +31,6 @@ public class WebPageExperiment{
 	private WebPageSelection selectionOperator;
 	
 	@OneToOne(cascade=CascadeType.REMOVE)
-	private User user;
-	
-	@OneToOne(cascade=CascadeType.REMOVE)
 	private FinalResults finalResult;
 	
 	private int numberOfRepetition;
@@ -52,20 +49,6 @@ public class WebPageExperiment{
 		this.selectionOperator = selectionOperator;
 		this.numberOfRepetition = numberOfRepetition;
 	}
-
-	public WebPageExperiment(String id, WebPageAlgorithm algorithm, WebPageProblem problem, WebPageCrossover crossover, WebPageMutation mutation,
-			WebPageSelection selectionOperator, int numberOfRepetition, User user) {
-		super();
-		this.id = id;
-		this.algorithm = algorithm;
-		this.problem = problem;
-		this.crossover = crossover;
-		this.mutation = mutation;
-		this.selectionOperator = selectionOperator;
-		this.numberOfRepetition = numberOfRepetition;
-		this.user = user;
-	}
-
 
 	public String getId() {
 		return id;
@@ -113,14 +96,6 @@ public class WebPageExperiment{
 
 	public void setSelectionOperator(WebPageSelection selectionOperator) {
 		this.selectionOperator = selectionOperator;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
 	}
 
 	public FinalResults getFinalResult() {
