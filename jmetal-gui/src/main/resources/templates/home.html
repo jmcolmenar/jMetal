@@ -1,0 +1,124 @@
+<!--
+
+Documento       : home.html / jMetal GUI
+Descripción     : Página principal "Home" en la cual se detalla la información básica tanto de la librería jMetal como de la interfaz desarrollada.
+Entidad         : Universidad Rey Juan Carlos
+Autor           : Alejandro Manuel Pazos Boquete
+
+ -->
+
+<!DOCTYPE html>
+<body lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>jMetal GUI - Graphic User Interface for JMetal framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/png" href="/images/favicon.png" />
+    <!-- Estilos CSS - Página principal "Home" -->
+    <link href="/css/home_styles.css" rel="stylesheet">
+    <!-- Estilos CSS - Barra de navegación -->
+    <link href="/css/navbar_styles.css" rel="stylesheet">
+    <!-- Javascript botón toggle barra de navegación -->
+    <script src="/js/navbar.js" defer></script>
+</head>
+<body>
+
+    <!-- Barra de navegación -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/images/logo.png" alt="jMetal GUI" href="/">
+            </div>
+            <a href="#" class="toggle_button">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </a>
+            <div class="navbar_links">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/run_experiment">Run Experiment</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Texto de bienvenida -->
+    <section class="welcome">
+        <div class="container">
+            <h1>Welcome to the jMetal Graphic User Interface</h1>
+            <p class="tagline">jMetal, which stands for Metaheuristic Algorithms in Java, is an object-oriented Java-based framework for multi-objective optimization with metaheuristics.
+                <br>
+                <br>
+                The object-oriented architecture of the framework and its included features allows you to: experiment with the provided classic and state-of-the-art techniques, develop your own algorithms, solve your optimization problems, integrate jMetal in other tools, etc.</p>
+        </div>
+    </section>
+
+    <!-- Links a repositorios -->
+    <section class="repositories">
+        <div class="container">
+            <div class="box">
+                <a href="http://jmetal.sourceforge.net/"><img src="/images/jMetal_logo.png" alt="jMetal official website">
+                    <br>
+                    <br>
+                    jMetal official website</a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="box">
+                <a href="https://github.com/jMetal/jMetal"><img src="images/GitHub_logo.png" alt="jMetal official GitHub repository">
+                    <br>
+                    <br>
+                    jMetal official GitHub repository</a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="box">
+                <a href="https://github.com/jmcolmenar/jMetal"><img src="/images/GitHub_logo.png" alt="jMetal GUI project GitHub repository">
+                    <br>
+                    <br>
+                    jMetal GUI project GitHub repository</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Funciones -->
+    <section class="features">
+        <div class="title">
+            <h2>jMetal GUI Features</h2>
+        </div>
+        <div class="content">
+            <div class="container">
+                <div class="box">
+                    <h2>01</h2>
+                    <h3>Run custom experiments</h3>
+                    <p>Run your own custom jMetal experiments by filling out the parameters through a simple form.</p>
+                </div>
+            </div>
+            <div class="container">
+                <div class="box">
+                    <h2>02</h2>
+                    <h3>Visualize experiment results</h3>
+                    <p>Graphically visualize the results of your executed experiments in an easy and simple way.</p>
+                </div>
+            </div>
+            <div class="container">
+                <div class="box">
+                    <h2>03</h2>
+                    <h3>Save your experiments</h3>
+                    <p>Executed experiments will be saved in such a way its results can be consulted at anytime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pie de página -->
+    <section class="footer">
+        <div class="container">
+            <p>Designed by Alejandro Manuel Pazos Boquete ©</p>
+        </div>
+    </section>
+
+</body>
+</html>

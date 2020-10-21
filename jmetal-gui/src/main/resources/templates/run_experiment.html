@@ -1,0 +1,144 @@
+<!--
+
+Documento       : run_experiment.html / jMetal GUI
+Descripción     : Página a través de la cual el usuario puede ejecutar sus propios experimentos con jMetal introduciendo los parámetros indicados.
+Entidad         : Universidad Rey Juan Carlos
+Autor           : Alejandro Manuel Pazos Boquete
+
+ -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <meta charset="UTF-8">
+        <title>jMetal GUI - Running a experiment</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Favicon -->
+        <link rel="shortcut icon" type="image/png" href="/images/favicon.png" />
+        <!-- Estilos CSS - Página "Run Experiment" -->
+        <link href="/css/run_experiment_styles.css" rel="stylesheet">
+        <!-- Estilos CSS - Barra de navegación -->
+        <link href="/css/navbar_styles.css" rel="stylesheet">
+        <!-- Javascript botón toggle barra de navegación -->
+        <script src="/js/navbar.js" defer></script>
+        <!--  -->
+        <script src="/js/run_experiment.js" defer></script>
+    </head>
+</head>
+<body>
+
+    <!-- Barra de navegación -->
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <img src="/images/logo.png" alt="jMetal GUI" href="/">
+            </div>
+            <a href="#" class="toggle_button">
+                <span class="line"></span>
+                <span class="line"></span>
+                <span class="line"></span>
+            </a>
+            <div class="navbar_links">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/run_experiment">Run Experiment</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Formulario de experimento -->
+    <section class="experiment_form">
+        <form class="form" id="form" action="run_experiment/show_results" method="post">
+            <h3>jMetal - Experiment form</h3>
+            <fieldset>
+                <label for="algorithm">Choose an algorithm:</label>
+                <br>
+                <br>
+                <select id="algorithm" name="algorithm" type="text" required autofocus>
+                    <option disabled selected="selected" value="none"> -- Select an option -- </option>
+                    <option value="nsgaii">NSGA-II</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <label for="test_problem">Choose a test problem:</label>
+                <br>
+                <br>
+                <select id="test_problem" name="test_problem" type="text" required>
+                    <option disabled selected="selected" value="none"> -- Select an option -- </option>
+                    <option value="zdt.ZDT1">ZDT1</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <input id="generations" name="generations" placeholder="Generations" type="number" required>
+            </fieldset>
+            <fieldset>
+                <input id="population_size" name= "population_size" placeholder="Population size" type="number" required>
+            </fieldset>
+            <fieldset>
+                <label for="crossover_operator">Choose a crossover operator:</label>
+                <br>
+                <br>
+                <select id="crossover_operator" name="crossover_operator" type="text"  onchange="selected_check(this);" required>
+                    <option disabled selected="selected" value="none"> -- Select an option -- </option>
+                    <option value="SBXCrossover">Simulated Binary Crossover (SBX)</option>
+                </select>
+            </fieldset>
+            <div id="crossover_operator_values" style="display: none">
+                <div id="crossover_operator_probability">
+                    <fieldset>
+                        <input id="crossover_probability" name="crossover_probability" placeholder="Probability value" type="number" step="0.01" required>
+                    </fieldset>
+                </div>
+                <div id="crossover_operator_distribution_index">
+                    <fieldset>
+                        <input id="crossover_distribution_index" name="crossover_distribution_index" placeholder="Distribution index value" type="number" step="0.01" required>
+                    </fieldset>
+                </div>
+            </div>
+            <fieldset>
+                <label for="mutation_operator">Choose a mutation operator:</label>
+                <br>
+                <br>
+                <select id="mutation_operator" name="mutation_operator" type="text" onchange="selected_check2(this);" required>
+                    <option disabled selected="selected" value="none"> -- Select an option -- </option>
+                    <option value="PolynomialMutation">Polynomial Mutation</option>
+                </select>
+            </fieldset>
+            <div id="mutation_operator_values" style="display: none">
+                <div id="mutation_operator_probability">
+                    <fieldset>
+                        <input id="mutation_probability" name="mutation_probability" placeholder="Probability value" type="number" step="0.01" required>
+                    </fieldset>
+                </div>
+                <div id="mutation_operator_distribution_index">
+                    <fieldset>
+                        <input id="mutation_distribution_index" name="mutation_distribution_index" placeholder="Distribution index value" type="number" step="0.01" required>
+                    </fieldset>
+                </div>
+            </div>
+            <fieldset>
+                <label for="selection_operator">Choose a selection operator:</label>
+                <br>
+                <br>
+                <select id="selection_operator" name="selection_operator" type="text" required>
+                    <option disabled selected="selected" value="none"> -- Select an option -- </option>
+                    <option value="BinaryTournamentSelection">Binary Tournament Selection</option>
+                </select>
+            </fieldset>
+            <fieldset>
+                <button name="submit" type="submit" id="runButton" >Run Experiment</button>
+            </fieldset>
+        </form>
+    </section>
+
+    <!-- Pie de página -->
+    <section class="footer">
+        <div class="container">
+            <p>Designed by Alejandro Manuel Pazos Boquete ©</p>
+        </div>
+    </section>
+
+</body>
+</html>

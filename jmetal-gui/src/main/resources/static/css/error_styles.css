@@ -1,0 +1,100 @@
+/*------------------------
+Documento       : home_styles.css / jMetal GUI
+Descripción     : Estilos correspondientes a la página principal home.html.
+Entidad         : Universidad Rey Juan Carlos
+Autor           : Alejandro Manuel Pazos Boquete
+------------------------*/
+
+/*------------------------
+[TABLA DE CONTENIDOS]
+
+1. IMPORTS
+2. ESTILOS GLOBALES
+3. MENSAJE DE ERROR
+------------------------*/
+
+/* 1. IMPORTS
+----------------------*/
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,700;1,300&display=swap');
+
+/* 2. ESTILOS GLBOALES
+----------------------*/
+body {
+    padding: 0;
+    margin: 0;
+}
+
+/* 3. MENSAJE DE ERROR
+----------------------*/
+.error {
+    position: relative;
+    height: 100vh;
+}
+
+.error .message_container {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+.message_container {
+    max-width: 560px;
+    width: 100%;
+    line-height: 1.1;
+    display: flex;
+    flex-direction: row;
+}
+
+.message_container .image img {
+    height: 140px;
+    width: 140px;
+    padding: 2rem;
+}
+
+.message_container .message h1 {
+    font-family: 'Lato', sans-serif;
+    font-size: 65px;
+    font-weight: 700;
+    margin-top: 0px;
+    margin-bottom: 10px;
+    color: #151723;
+    text-transform: uppercase;
+}
+
+.message_container .message h2 {
+    font-family: 'Lato', sans-serif;
+    font-size: 21px;
+    font-weight: 400;
+    margin: 0;
+    text-transform: uppercase;
+    color: #151723;
+}
+
+.message_container .message p {
+    font-family: 'Lato', sans-serif;
+    color: #999fa5;
+    font-weight: 400;
+}
+
+.message_container .message a {
+    font-family: 'Lato', sans-serif;
+    display: inline-block;
+    font-weight: 700;
+    border-radius: 40px;
+    text-decoration: none;
+    color: #388dbc;
+}
+
+@media only screen and (max-width: 768px) {
+    .message_container {
+        justify-items: center;
+        display: grid;
+    }
+
+    .message_container .message {
+        text-align: center;
+    }
+}
